@@ -45,6 +45,10 @@ async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> 
     Sse::new(stream)
 }
 
+async fn submit_post(body: String) {
+    tracing::info!("Creating new post: {}", body);
+}
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -58,7 +62,8 @@ async fn main() {
     let app = Router::new()
         .route("/", get(home))
         .route("/create_post", post(create_post))
-        .route("/generate_post", get(generate_post));
+        .route("/generate_post", get(generate_post))
+	.route("/submit_post", post(submit_post));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await
