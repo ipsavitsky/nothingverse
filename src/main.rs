@@ -1,6 +1,10 @@
+use std::time::Duration;
+
 use askama::Template;
 use axum::{
-    response::sse::{Event, Sse}, routing::{get, post}, Router
+    response::sse::{Event, KeepAlive, Sse},
+    routing::{get, post},
+    Router,
 };
 use futures::stream::Stream;
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
@@ -42,7 +46,11 @@ async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> 
             Ok(Event::default().data(&res).event("generation_chunk"))
         });
 
-    Sse::new(stream)
+    Sse::new(stream).keep_alive(
+        KeepAlive::new()
+            .interval(Duration::from_secs(1))
+            .text("Keep-alive"),
+    )
 }
 
 async fn submit_post(body: String) {
