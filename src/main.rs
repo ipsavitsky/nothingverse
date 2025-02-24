@@ -1,74 +1,11 @@
-use std::time::Duration;
-
-use askama::Template;
 use axum::{
-    response::sse::{Event, KeepAlive, Sse},
     routing::{get, post},
     Router,
 };
-use futures::stream::{self, Stream};
-use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
-use tokio_stream::StreamExt;
 use tracing_subscriber;
 use version_check;
 
-#[derive(Template)]
-#[template(path = "home.html")]
-struct HomeTemplate {}
-
-#[derive(Template)]
-#[template(path = "new_post.html")]
-struct NewPostTemplate {
-    indices: Vec<u32>
-}
-
-#[derive(Template)]
-#[template(path = "create_post_button.html")]
-struct CreatePostButtonTemplate {}
-
-async fn home() -> HomeTemplate {
-    HomeTemplate {}
-}
-
-async fn create_post() -> NewPostTemplate {
-    NewPostTemplate {
-        indices: vec![1, 2, 3],
-    }
-}
-
-async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
-    let model = "llama3.2:latest".to_string();
-    let prompt =
-        "Write a very short post on any theme you'd like. One sentence, no extra info. You may use hashtags".to_string();
-
-    let ollama = Ollama::default();
-    let mut res = String::new();
-    let stream = ollama
-        .generate_stream(GenerationRequest::new(model, prompt))
-        .await
-        .unwrap()
-        .map(move |x| {
-            for resp in x? {
-                res += resp.response.as_str();
-            }
-            Ok(Event::default().data(&res).event("generation_chunk"))
-        });
-
-    // This is needed so that the sse stream never gets dropped. HTMX is desinged to reconnect upon dropped stream to maintain consistency, but that is not what we want
-    let infinite_stream =
-        stream::repeat_with(|| Ok(Event::default())).throttle(Duration::from_secs(60));
-
-    Sse::new(stream.merge(infinite_stream)).keep_alive(
-        KeepAlive::new()
-            .interval(Duration::from_secs(1))
-            .text("Keep-alive"),
-    )
-}
-
-async fn submit_post(body: String) -> CreatePostButtonTemplate {
-    tracing::info!("Creating new post: {}", body);
-    CreatePostButtonTemplate {}
-}
+mod web;
 
 #[tokio::main]
 async fn main() {
@@ -81,10 +18,10 @@ async fn main() {
         .init();
 
     let app = Router::new()
-        .route("/", get(home))
-        .route("/create_post", post(create_post))
-        .route("/generate_post", get(generate_post))
-        .route("/submit_post", post(submit_post));
+        .route("/", get(web::index::handle))
+        .route("/create_post", post(web::create_post::handle))
+        .route("/generate_post", get(web::generate_post::handle))
+        .route("/submit_post", post(web::submit_post::handle));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await
