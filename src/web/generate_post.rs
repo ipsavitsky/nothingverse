@@ -5,9 +5,9 @@ use ollama_rs::{generation::completion::request::GenerationRequest, Ollama, erro
 use tokio_stream::StreamExt;
 
 pub async fn handle() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
-    let model = "llama3.2:latest".to_string();
+    let model = "smollm2:135m".to_string();
     let prompt =
-        "Write a very short post on any theme you'd like. One sentence, no extra info. You may use hashtags".to_string();
+        "Write a very short post on any theme you'd like. One sentence, no extra info. You should use hashtags. Do not quote your response or write any additional information, just the post".to_string();
 
     let ollama = Ollama::default();
     let mut res = String::new();
