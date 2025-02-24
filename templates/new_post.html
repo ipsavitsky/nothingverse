@@ -1,11 +1,11 @@
-<button hx-post="/submit_post" hx-include="find div">
+<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation').textContent}">
     {% include "generation.html" %}
 </button>
 <br>
-<button hx-post="/submit_post" hx-include="find div">
+<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation').textContent}">
     {% include "generation.html" %}
 </button>
 <br>
-<button hx-post="/submit_post" hx-include="find div">
+<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation').textContent}">
     {% include "generation.html" %}
 </button>

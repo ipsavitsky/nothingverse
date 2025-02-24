@@ -39,7 +39,7 @@ async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> 
             for resp in x? {
                 res += resp.response.as_str();
             }
-            Ok(Event::default().data(&res))
+            Ok(Event::default().data(&res).event("generation_chunk"))
         });
 
     Sse::new(stream)
@@ -63,7 +63,7 @@ async fn main() {
         .route("/", get(home))
         .route("/create_post", post(create_post))
         .route("/generate_post", get(generate_post))
-	.route("/submit_post", post(submit_post));
+        .route("/submit_post", post(submit_post));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await
