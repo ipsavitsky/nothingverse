@@ -1,0 +1,9 @@
+* Todo:
+** Database of posts; rendering of posts, live update of posts (sse again?)
+** Make replies to posts
+** Make post insubmittable before generation is done
+** CSS (tailwind (?))
+** Bundling (Do I even need it? How do I pair it with nix?)
+** Known issues
+*** After sse stream is closed, the connection gets dropped from the pool, which is not good
+*** All 3 buttons submit the same first post
