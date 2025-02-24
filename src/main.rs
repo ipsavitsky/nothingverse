@@ -6,9 +6,9 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use futures::stream::Stream;
+use futures::stream::{self, Stream};
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
-use tokio_stream::StreamExt as _;
+use tokio_stream::StreamExt;
 use tracing_subscriber;
 use version_check;
 
@@ -46,7 +46,11 @@ async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> 
             Ok(Event::default().data(&res).event("generation_chunk"))
         });
 
-    Sse::new(stream).keep_alive(
+    // This is needed so that the sse stream never gets dropped. HTMX is desinged to reconnect upon dropped stream to maintain consistency, but that is not what we want
+    let infinite_stream =
+        stream::repeat_with(|| Ok(Event::default())).throttle(Duration::from_secs(60));
+
+    Sse::new(stream.merge(infinite_stream)).keep_alive(
         KeepAlive::new()
             .interval(Duration::from_secs(1))
             .text("Keep-alive"),
