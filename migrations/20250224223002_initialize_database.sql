@@ -1,5 +1,5 @@
 CREATE TABLE posts (
     id INTEGER PRIMARY KEY,
-    post TEXT,
-    timestamp INTEGER
+    content TEXT NOT NULL,
+    timestamp INTEGER NOT NULL
 )

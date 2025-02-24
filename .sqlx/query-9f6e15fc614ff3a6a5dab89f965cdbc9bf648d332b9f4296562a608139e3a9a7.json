@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO posts (content, timestamp) VALUES (?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "9f6e15fc614ff3a6a5dab89f965cdbc9bf648d332b9f4296562a608139e3a9a7"
+}

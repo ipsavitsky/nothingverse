@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/htmx-ext-sse@2.2.2"></script>
@@ -9,4 +10,10 @@
     <div id="post_area">
         {% include "create_post_button.html" %}
     </div>
+
+    {% for post in posts %}
+    <div>
+      {{ post.content }}
+    </div> <br>
+    {% endfor %}
 </body>

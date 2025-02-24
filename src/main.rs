@@ -3,8 +3,6 @@ use axum::{
     Router,
 };
 use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
-use tracing_subscriber;
-use version_check;
 
 mod web;
 
@@ -23,21 +21,19 @@ async fn main() {
         .with_max_level(tracing::Level::TRACE)
         .init();
 
-    let pool = SqlitePoolOptions::new()
+    let db_pool = SqlitePoolOptions::new()
         .connect("sqlite://db/nothing.sqlite")
         .await
         .unwrap();
 
-    sqlx::migrate!().run(&pool).await.unwrap();
+    sqlx::migrate!().run(&db_pool).await.unwrap();
 
     let app = Router::new()
         .route("/", get(web::index::handle))
         .route("/create_post", post(web::create_post::handle))
         .route("/generate_post", get(web::generate_post::handle))
         .route("/submit_post", post(web::submit_post::handle))
-        .with_state(AppState {
-	    db_pool: pool,
-        });
+        .with_state(AppState { db_pool });
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await
