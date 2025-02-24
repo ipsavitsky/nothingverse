@@ -3,7 +3,7 @@ use askama::Template;
 #[derive(Template)]
 #[template(path = "new_post.html")]
 pub struct NewPostTemplate {
-    indices: Vec<u32>
+    indices: Vec<u32>,
 }
 
 pub async fn handle() -> NewPostTemplate {

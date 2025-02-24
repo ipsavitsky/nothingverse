@@ -44,6 +44,7 @@
                 ln -s ${chunkyFont} chunky.flf
                 toilet -f ./chunky.flf nothingverse --html > templates/logo.html
               '';
+              SQLX_OFFLINE = true;
             };
           };
         };
@@ -58,6 +59,8 @@
               cargo-watch
               just
               wget
+              sqlx-cli
+              sqlite
               rust-bin.stable.latest.default
             ];
           };

@@ -1,7 +1,10 @@
+use axum::response::{
+    sse::{Event, KeepAlive},
+    Sse,
+};
 use futures::stream::{self, Stream};
+use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
 use std::time::Duration;
-use axum::response::{sse::{Event, KeepAlive}, Sse};
-use ollama_rs::{generation::completion::request::GenerationRequest, Ollama, error::OllamaError};
 use tokio_stream::StreamExt;
 
 pub async fn handle() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
