@@ -18,14 +18,22 @@ struct HomeTemplate {}
 
 #[derive(Template)]
 #[template(path = "new_post.html")]
-struct NewPostTemplate {}
+struct NewPostTemplate {
+    indices: Vec<u32>
+}
+
+#[derive(Template)]
+#[template(path = "create_post_button.html")]
+struct CreatePostButtonTemplate {}
 
 async fn home() -> HomeTemplate {
     HomeTemplate {}
 }
 
 async fn create_post() -> NewPostTemplate {
-    NewPostTemplate {}
+    NewPostTemplate {
+        indices: vec![1, 2, 3],
+    }
 }
 
 async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
@@ -57,8 +65,9 @@ async fn generate_post() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> 
     )
 }
 
-async fn submit_post(body: String) {
+async fn submit_post(body: String) -> CreatePostButtonTemplate {
     tracing::info!("Creating new post: {}", body);
+    CreatePostButtonTemplate {}
 }
 
 #[tokio::main]

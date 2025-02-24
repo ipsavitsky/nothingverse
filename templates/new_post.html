@@ -1,14 +1,9 @@
-<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation-1').textContent}">
-    {% let index = 1 %}
+{% for index in indices %}
+<button hx-post="/submit_post"
+        hx-target="#post_area"
+        hx-disinherit="hx-target"
+        hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}">
     {% include "generation.html" %}
 </button>
 <br>
-<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation-2').textContent}">
-    {% let index = 2 %}
-    {% include "generation.html" %}
-</button>
-<br>
-<button hx-post="/submit_post" hx-vals="js:{content: document.getElementById('generation-3').textContent}">
-    {% let index = 3 %}
-    {% include "generation.html" %}
-</button>
+{% endfor %}

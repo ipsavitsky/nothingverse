@@ -6,7 +6,7 @@
 <body>
     Welcome to <br>
     {% include "logo.html" %}
-    <button hx-post="/create_post" hx-swap="outerHTML">
-        Generate post
-    </button>
+    <div id="post_area">
+        {% include "create_post_button.html" %}
+    </div>
 </body>
