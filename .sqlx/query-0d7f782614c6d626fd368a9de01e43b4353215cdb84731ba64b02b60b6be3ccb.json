@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT content FROM posts",
+  "query": "SELECT content FROM posts ORDER BY timestamp DESC LIMIT 10",
   "describe": {
     "columns": [
       {
@@ -16,5 +16,5 @@
       false
     ]
   },
-  "hash": "1e9fa336d61b3fa1ffee8f01c1f46e5c0b6f48319517bebca5149c72e650ebe0"
+  "hash": "0d7f782614c6d626fd368a9de01e43b4353215cdb84731ba64b02b60b6be3ccb"
 }

@@ -33,6 +33,7 @@ async fn main() {
         .route("/create_post", post(web::create_post::handle))
         .route("/generate_post", get(web::generate_post::handle))
         .route("/submit_post", post(web::submit_post::handle))
+        .route("/posts", get(web::posts::handle))
         .with_state(AppState { db_pool });
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
