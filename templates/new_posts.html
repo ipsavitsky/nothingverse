@@ -1,0 +1,10 @@
+<div hx-post="/new_posts"
+     hx-vals="js:{after:{{ after_id }}}"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML">
+</div>
+{% for post in new_posts %}
+<div>
+    {{ post.content }}
+</div> <br>
+{% endfor %}

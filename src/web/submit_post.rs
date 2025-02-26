@@ -18,11 +18,8 @@ pub async fn handle(
     Form(f): Form<PostData>,
 ) -> CreatePostButtonTemplate {
     tracing::info!("Creating new post: {}", f.content);
-    let _ = sqlx::query!(
-        "INSERT INTO posts (content) VALUES (?)",
-        f.content,
-    )
-    .execute(&s.db_pool)
-    .await;
+    let _ = sqlx::query!("INSERT INTO posts (content) VALUES (?)", f.content,)
+        .execute(&s.db_pool)
+        .await;
     CreatePostButtonTemplate {}
 }
