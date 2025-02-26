@@ -1,6 +1,6 @@
 {% for index in indices %}
-<button hx-post="/submit_post"
-        hx-target="#post_area"
+<button hx-post="{{ post_endpoint }}"
+        hx-target="{{ swap_target }}"
         hx-disinherit="hx-target"
         hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}">
     {% include "generation.html" %}
