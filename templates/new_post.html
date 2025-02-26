@@ -1,9 +1,11 @@
 {% for index in indices %}
-<button hx-post="{{ post_endpoint }}"
-        hx-target="{{ swap_target }}"
-        hx-disinherit="hx-target"
-        hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}">
-    {% include "generation.html" %}
+<button
+  hx-post="{{ post_endpoint }}"
+  hx-target="{{ swap_target }}"
+  hx-disinherit="hx-target"
+  hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}"
+>
+  {% include "generation.html" %}
 </button>
-<br>
+<br />
 {% endfor %}
