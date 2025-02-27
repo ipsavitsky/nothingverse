@@ -1,21 +1,24 @@
-use axum::response::{
-    sse::{Event, KeepAlive},
-    Sse,
+use axum::{
+    extract::State,
+    response::{
+        sse::{Event, KeepAlive},
+        Sse,
+    },
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
 use std::time::Duration;
 use tokio_stream::StreamExt;
 
-pub async fn handle() -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
-    let model = "smollm2:135m".to_string();
-    let prompt =
-        "Write a very short post on any theme you'd like. One sentence, no extra info. You should use hashtags. Do not quote your response or write any additional information, just the post".to_string();
+use crate::AppState;
 
-    let ollama = Ollama::default();
+pub async fn handle(
+    State(s): State<AppState>,
+) -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
+    let ollama = Ollama::new(s.conf.ollama_url, s.conf.ollama_port);
     let mut res = String::new();
     let stream = ollama
-        .generate_stream(GenerationRequest::new(model, prompt))
+        .generate_stream(GenerationRequest::new(s.conf.model, s.conf.prompt))
         .await
         .unwrap()
         .map(move |x| {
