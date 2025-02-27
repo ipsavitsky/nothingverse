@@ -68,7 +68,7 @@
               openssl
               toilet
               rust-analyzer
-              cargo-watch
+              watchexec
               just
               wget
               sqlx-cli

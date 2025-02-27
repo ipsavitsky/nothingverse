@@ -9,3 +9,6 @@ make_logo: pull_font
 pull_font:
     mkdir -p resources
     wget http://www.figlet.org/fonts/chunky.flf -O resources/chunky.flf
+
+watch:
+    watchexec -r -- cargo run
