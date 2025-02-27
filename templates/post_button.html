@@ -1,0 +1,11 @@
+<div id="generation-{{ index }}">
+    {{ post_data }}
+</div>
+<button
+    hx-post="/submit_post"
+    hx-target="#post_area"
+    hx-disinherit="hx-target"
+    hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}"
+>
+    Post
+</button>

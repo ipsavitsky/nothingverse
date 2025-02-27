@@ -15,10 +15,10 @@ use tokio_stream::StreamExt;
 use crate::AppState;
 
 #[derive(Template)]
-#[template(path = "post_button.html")]
-struct PostButton {
+#[template(path = "reply_button.html")]
+struct ReplyButton {
     index: String,
-    post_data: String,
+    reply_data: String,
 }
 
 pub async fn handle(
@@ -34,9 +34,9 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
-                    res = PostButton {
+                    res = ReplyButton {
                         index: Uuid::new_v4().to_string(),
-                        post_data: res.clone(),
+                        reply_data: res.clone(),
                     }
                     .render()
                     .unwrap()

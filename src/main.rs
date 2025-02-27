@@ -59,6 +59,7 @@ async fn main() {
         .route("/create_post", post(web::create_post::handle))
         .route("/create_reply", post(web::create_reply::handle))
         .route("/generate_post", get(web::generate_post::handle))
+        .route("/generate_reply", get(web::generate_reply::handle))
         .route("/submit_post", post(web::submit_post::handle))
         .route("/new_posts", post(web::new_posts::handle))
         .with_state(AppState { db_pool, conf });
