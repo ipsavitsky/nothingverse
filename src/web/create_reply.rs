@@ -11,11 +11,11 @@ pub struct NewPostTemplate {
 }
 
 #[derive(Deserialize)]
-pub struct Thing {
+pub struct ReplyData {
     post_id: String,
 }
 
-pub async fn handle(Form(f): Form<Thing>) -> NewPostTemplate {
+pub async fn handle(Form(f): Form<ReplyData>) -> NewPostTemplate {
     NewPostTemplate {
         indices: vec!["1", "2", "3"]
             .iter()
