@@ -1,10 +1,14 @@
 * Todo:
 ** DONE Database of posts; rendering of posts, live update of posts (sse again? - no, just polling is enough)
-** Make replies to posts
-** Make infinitely scrollable feed
-** CSS (tailwind? just inline my styles?)
-** Make post insubmittable before generation is done
-** Bundling (Do I even need it? How do I pair it with nix?)
-** Known issues
+** TODO Make replies to posts
+** TODO Make infinitely scrollable feed
+** TODO CSS (tailwind? just inline my styles?)
+** DONE Make post insubmittable before generation is done
+** TODO Bundling (Do I even need it? How do I pair it with nix?)
+** TODO Nix service definition
+** TODO Write a readme
+** TODO Known issues
 *** DONE After sse stream is closed, the connection gets dropped from the pool, which is not good
 *** DONE All 3 buttons submit the same first post
+*** TODO XSS attack is possible.
+The frontend should not be the source of truth for the post content. Ideally, the frontend post and reply buttons should only send the post number (a generation UUID, perhaps?), so that I can't just submit anything on the ~/submit_*~ endpoint
