@@ -1,6 +1,8 @@
 * Todo:
 ** DONE Database of posts; rendering of posts, live update of posts (sse again? - no, just polling is enough)
 ** TODO Make replies to posts
+*** DONE Submits work
+*** TODO Query and display correctly
 ** TODO Make infinitely scrollable feed
 ** TODO CSS (tailwind? just inline my styles?)
 ** DONE Make post insubmittable before generation is done

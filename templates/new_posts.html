@@ -7,10 +7,8 @@
 {% for post in new_posts %}
 <div>
   {{ post.content }}
-  <div id="reply_area_{{ post.id }}" hx-vals="js:{post_id: {{ post.id }}}">
-    <button hx-post="/create_reply" hx-target="#reply_area_{{ post.id }}">
-      Reply
-    </button>
+  <div id="reply_area_{{ post.id }}">
+    {% let post_id = post.id %} {% include "create_reply_button.html" %}
   </div>
 </div>
 <br />

@@ -7,7 +7,5 @@ pub struct NewPostTemplate {
 }
 
 pub async fn handle() -> NewPostTemplate {
-    NewPostTemplate {
-        index: 3,
-    }
+    NewPostTemplate { index: 3 }
 }

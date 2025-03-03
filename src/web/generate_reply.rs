@@ -1,6 +1,6 @@
 use askama::Template;
 use axum::{
-    extract::State,
+    extract::{Path, State},
     response::{
         sse::{Event, KeepAlive},
         Sse,
@@ -8,9 +8,10 @@ use axum::{
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
-use uuid::Uuid;
+use serde::Deserialize;
 use std::time::Duration;
 use tokio_stream::StreamExt;
+use uuid::Uuid;
 
 use crate::AppState;
 
@@ -19,15 +20,37 @@ use crate::AppState;
 struct ReplyButton {
     index: String,
     reply_data: String,
+    post_id: i64,
+}
+
+#[derive(Deserialize)]
+pub struct PathData {
+    post_id: i64,
+}
+
+struct PostData {
+    content: String,
 }
 
 pub async fn handle(
+    Path(p): Path<PathData>,
     State(s): State<AppState>,
 ) -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
+    let post = sqlx::query_as!(
+        PostData,
+        "SELECT content FROM posts where id = ?",
+        p.post_id
+    )
+    .fetch_one(&s.db_pool)
+    .await
+    .unwrap();
     let ollama = Ollama::new(s.conf.ollama_url, s.conf.ollama_port);
     let mut res = String::new();
     let stream = ollama
-        .generate_stream(GenerationRequest::new(s.conf.model, s.conf.prompt))
+        .generate_stream(GenerationRequest::new(
+            s.conf.model,
+            format!("Write a good reply to the following post: {}", post.content),
+        ))
         .await
         .unwrap()
         .map(move |x| {
@@ -37,6 +60,7 @@ pub async fn handle(
                     res = ReplyButton {
                         index: Uuid::new_v4().to_string(),
                         reply_data: res.clone(),
+                        post_id: p.post_id,
                     }
                     .render()
                     .unwrap()

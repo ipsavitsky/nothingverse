@@ -1,7 +1,7 @@
 <div
-    hx-ext="sse"
-    sse-connect="/generate_reply"
-    sse-swap="generation_chunk"
+  hx-ext="sse"
+  sse-connect="/generate_reply/{{ post_id }}"
+  sse-swap="generation_chunk"
 >
-    Generating...
+  Generating...
 </div>

@@ -8,9 +8,9 @@ use axum::{
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
-use uuid::Uuid;
 use std::time::Duration;
 use tokio_stream::StreamExt;
+use uuid::Uuid;
 
 use crate::AppState;
 
