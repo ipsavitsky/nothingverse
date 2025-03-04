@@ -9,8 +9,11 @@
 ** TODO Bundling (Do I even need it? How do I pair it with nix?)
 ** TODO Nix service definition
 ** TODO Write a readme
+** TODO Decied if we need a custom generation sse handler
+Currently, the server grows the string out of generation tokens, but what if we only send the tokens and grow the string on the frontend and backend.
 ** TODO Known issues
 *** DONE After sse stream is closed, the connection gets dropped from the pool, which is not good
 *** DONE All 3 buttons submit the same first post
-*** TODO XSS attack is possible.
-The frontend should not be the source of truth for the post content. Ideally, the frontend post and reply buttons should only send the post number (a generation UUID, perhaps?), so that I can't just submit anything on the ~/submit_*~ endpoint
+*** TODO XSS attack is possible
+The frontend should not be the source of truth for the post content. Ideally, the frontend post and reply buttons should only send the post number (a generation UUID, perhaps?), so that I can't just submit anything on the ~/submit_*~ endpoint.
+On the second thought, ~/generate_*~ endpoints should write to the generation table, and posts and replies should join on generation id. No UUID requred and no frontend state.
