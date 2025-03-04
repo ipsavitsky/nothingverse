@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT\n             id,\n             content\n           FROM posts\n           WHERE posts.id > ?\n           ORDER BY posts.timestamp DESC",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "166918903c33a1916c2bb8668b5b27b1817e587dc0721b4b3325d568b9b8e51f"
+}

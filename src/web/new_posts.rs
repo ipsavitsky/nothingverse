@@ -5,31 +5,10 @@ use serde::Deserialize;
 use crate::AppState;
 
 #[derive(Default)]
-pub struct PostData {
-    id: i64,
-    content: String,
-    reply_content: Option<String>,
-}
-
 pub struct Post {
     id: i64,
     content: String,
     replies: Vec<String>,
-}
-
-impl Into<Post> for PostData {
-    fn into(self) -> Post {
-        Post {
-            id: self.id,
-            content: self.content,
-            replies: self
-                .reply_content
-                .unwrap_or_default()
-                .split("<SEPARATOR>")
-                .map(String::from)
-                .collect(),
-        }
-    }
 }
 
 #[derive(Template)]
@@ -45,31 +24,43 @@ pub struct NewPostData {
 }
 
 pub async fn handle(State(s): State<AppState>, Form(form): Form<NewPostData>) -> PostsTemplate {
-    let posts = sqlx::query_as!(
-        PostData,
-        r#"SELECT
-             posts.id,
-             posts.content,
-             group_concat(replies.content, "<SEPARATOR>") as reply_content
+    let posts: Vec<Post> = futures::future::join_all(
+        sqlx::query!(
+            r#"SELECT
+             id,
+             content
            FROM posts
-           LEFT JOIN replies on posts.id = replies.post_id
            WHERE posts.id > ?
-           GROUP BY posts.id
            ORDER BY posts.timestamp DESC"#,
-        form.after
+            form.after
+        )
+        .fetch_all(&s.db_pool)
+        .await
+        .unwrap()
+        .into_iter()
+        .map(async |r| Post {
+            id: r.id,
+            content: r.content,
+            replies: sqlx::query!("SELECT content FROM replies WHERE post_id = ?", r.id)
+                .fetch_all(&s.db_pool)
+                .await
+                .unwrap()
+                .into_iter()
+                .map(|r| r.content)
+                .collect(),
+        }),
     )
-    .fetch_all(&s.db_pool)
-    .await
-    .unwrap();
+    .await;
+
     PostsTemplate {
         after_id: posts
             .first()
-            .unwrap_or(&PostData {
+            .unwrap_or(&Post {
                 id: form.after,
                 content: String::new(),
-                reply_content: None,
+                replies: Vec::default(),
             })
             .id,
-        new_posts: posts.into_iter().map(|x| x.into()).collect(),
+        new_posts: posts,
     }
 }

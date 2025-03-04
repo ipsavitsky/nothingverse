@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT\n             id,\n             content\n           FROM posts\n           ORDER BY timestamp DESC LIMIT 10",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "bb9cd2c88a34d0cc28571bb8fe323e0ae0e24b22093f1e577ef5c5d2fc96469c"
+}
