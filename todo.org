@@ -2,7 +2,8 @@
 ** DONE Database of posts; rendering of posts, live update of posts (sse again? - no, just polling is enough)
 ** TODO Make replies to posts
 *** DONE Submits work
-*** TODO Query and display correctly
+*** DONE Query and display correctly
+*** TODO Make them update correctly
 ** TODO Make infinitely scrollable feed
 ** TODO CSS (tailwind? just inline my styles?)
 ** DONE Make post insubmittable before generation is done
@@ -17,3 +18,5 @@ Currently, the server grows the string out of generation tokens, but what if we 
 *** TODO XSS attack is possible
 The frontend should not be the source of truth for the post content. Ideally, the frontend post and reply buttons should only send the post number (a generation UUID, perhaps?), so that I can't just submit anything on the ~/submit_*~ endpoint.
 On the second thought, ~/generate_*~ endpoints should write to the generation table, and posts and replies should join on generation id. No UUID requred and no frontend state.
+*** TODO Code duplication - LOADS of code duplicated, just take a look at index.rs and new_posts.rs
+*** TODO Some naming convention connecting template <-> implementation would be nice

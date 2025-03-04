@@ -6,7 +6,8 @@
 ></div>
 {% for post in new_posts %}
 <div>
-  {{ post.content }}
+  {{ post.content }} <br />
+  {% for reply in post.replies %} {{ reply }} <br /> {% endfor %}
   <div id="reply_area_{{ post.id }}">
     {% let post_id = post.id %} {% include "create_reply_button.html" %}
   </div>

@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT\n             posts.id,\n             posts.content,\n             replies.content AS reply_content\n           FROM posts\n           LEFT JOIN replies on posts.id = replies.post_id\n           ORDER BY posts.timestamp DESC LIMIT 10",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "reply_content",
+        "ordinal": 2,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "e686a510eba3b55d1990d347af608db6957ec74f2ffd15dc2757d5b167fa22a7"
+}

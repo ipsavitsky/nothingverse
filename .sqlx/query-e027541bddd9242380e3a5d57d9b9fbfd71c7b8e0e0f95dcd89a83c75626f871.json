@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT\n             posts.id,\n             posts.content,\n             replies.content as reply_content\n           FROM posts\n           LEFT JOIN replies on posts.id = replies.post_id\n           WHERE posts.id > ?\n           ORDER BY posts.timestamp DESC",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "reply_content",
+        "ordinal": 2,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "e027541bddd9242380e3a5d57d9b9fbfd71c7b8e0e0f95dcd89a83c75626f871"
+}
