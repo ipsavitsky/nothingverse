@@ -10,16 +10,19 @@ pub struct CreatePostButtonTemplate {}
 
 #[derive(Deserialize)]
 pub struct PostData {
-    content: String,
+    generation_id: i64,
 }
 
 pub async fn handle(
     State(s): State<AppState>,
     Form(f): Form<PostData>,
 ) -> CreatePostButtonTemplate {
-    tracing::info!("Creating new post: {}", f.content);
-    let _ = sqlx::query!("INSERT INTO posts (content) VALUES (?)", f.content,)
-        .execute(&s.db_pool)
-        .await;
+    tracing::info!("Creating new post: {}", f.generation_id);
+    let _ = sqlx::query!(
+        "INSERT INTO posts (generation_id) VALUES (?)",
+        f.generation_id,
+    )
+    .execute(&s.db_pool)
+    .await;
     CreatePostButtonTemplate {}
 }

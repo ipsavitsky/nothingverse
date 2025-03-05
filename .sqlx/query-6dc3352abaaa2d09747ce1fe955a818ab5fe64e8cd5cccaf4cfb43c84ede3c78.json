@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT content FROM posts where id = ?",
+  "query": "SELECT generations.content FROM posts LEFT JOIN generations ON posts.generation_id = generations.id WHERE posts.id = ?",
   "describe": {
     "columns": [
       {
@@ -13,8 +13,8 @@
       "Right": 1
     },
     "nullable": [
-      false
+      true
     ]
   },
-  "hash": "fb587fccac7c90b4575597f7f76884a8b19d8db3fcef15456e83ba7a960b85c8"
+  "hash": "6dc3352abaaa2d09747ce1fe955a818ab5fe64e8cd5cccaf4cfb43c84ede3c78"
 }

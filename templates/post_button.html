@@ -1,9 +1,9 @@
-<div id="generation-{{ index }}">{{ post_data }}</div>
+{{ post_data }}
 <button
   hx-post="/submit_post"
   hx-target="#post_area"
   hx-disinherit="hx-target"
-  hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}"
+  hx-vals="js:{generation_id: {{ generation_id }}}"
 >
   Post
 </button>

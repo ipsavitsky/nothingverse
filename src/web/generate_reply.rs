@@ -11,14 +11,13 @@ use ollama_rs::{error::OllamaError, generation::completion::request::GenerationR
 use serde::Deserialize;
 use std::time::Duration;
 use tokio_stream::StreamExt;
-use uuid::Uuid;
 
 use crate::AppState;
 
 #[derive(Template)]
 #[template(path = "reply_button.html")]
 struct ReplyButton {
-    index: String,
+    generation_id: i64,
     reply_data: String,
     post_id: i64,
 }
@@ -36,14 +35,17 @@ pub async fn handle(
     Path(p): Path<PathData>,
     State(s): State<AppState>,
 ) -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
-    let post = sqlx::query_as!(
-        PostData,
-        "SELECT content FROM posts where id = ?",
+    let post = sqlx::query!(
+        "SELECT generations.content FROM posts LEFT JOIN generations ON posts.generation_id = generations.id WHERE posts.id = ?",
         p.post_id
     )
     .fetch_one(&s.db_pool)
     .await
+    .map(|r| PostData {
+        content: r.content.unwrap(),
+    })
     .unwrap();
+
     let ollama = Ollama::new(s.conf.ollama_url, s.conf.ollama_port);
     let mut res = String::new();
     let stream = ollama
@@ -57,8 +59,18 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
+                    let generation_id = futures::executor::block_on(
+                        sqlx::query!(
+                            "INSERT INTO generations (content) VALUES (?) RETURNING id",
+                            res
+                        )
+                        .fetch_one(&s.db_pool),
+                    )
+                    .map(|r| r.id)
+                    .unwrap();
+
                     res = ReplyButton {
-                        index: Uuid::new_v4().to_string(),
+                        generation_id,
                         reply_data: res.clone(),
                         post_id: p.post_id,
                     }

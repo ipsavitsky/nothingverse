@@ -1,9 +1,9 @@
-<div id="generation-{{ index }}">{{ reply_data }}</div>
+{{ reply_data }}
 <button
   hx-post="/submit_reply/{{ post_id }}"
   hx-target="#reply_area_{{ post_id }}"
   hx-disinherit="hx-target"
-  hx-vals="js:{content: document.getElementById('generation-{{ index }}').textContent}"
+  hx-vals="js:{generation_id: {{ generation_id }}}"
 >
   Reply
 </button>

@@ -10,14 +10,13 @@ use futures::stream::{self, Stream};
 use ollama_rs::{error::OllamaError, generation::completion::request::GenerationRequest, Ollama};
 use std::time::Duration;
 use tokio_stream::StreamExt;
-use uuid::Uuid;
 
 use crate::AppState;
 
 #[derive(Template)]
 #[template(path = "post_button.html")]
 struct PostButton {
-    index: String,
+    generation_id: i64,
     post_data: String,
 }
 
@@ -34,8 +33,18 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
+                    let generation_id = futures::executor::block_on(
+                        sqlx::query!(
+                            "INSERT INTO generations (content) VALUES (?) RETURNING id",
+                            res
+                        )
+                        .fetch_one(&s.db_pool),
+                    )
+                    .map(|r| r.id)
+                    .unwrap();
+
                     res = PostButton {
-                        index: Uuid::new_v4().to_string(),
+                        generation_id,
                         post_data: res.clone(),
                     }
                     .render()

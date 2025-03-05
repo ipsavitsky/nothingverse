@@ -21,9 +21,10 @@ pub async fn handle(State(s): State<AppState>) -> IndexTemplate {
     let posts: Vec<Post> = futures::future::join_all(
         sqlx::query!(
             r#"SELECT
-             id,
-             content
+             posts.id,
+             generations.content
            FROM posts
+           LEFT JOIN generations ON generations.id = posts.generation_id
            ORDER BY timestamp DESC LIMIT 10"#
         )
         .fetch_all(&s.db_pool)
@@ -32,13 +33,13 @@ pub async fn handle(State(s): State<AppState>) -> IndexTemplate {
         .into_iter()
         .map(async |r| Post {
             id: r.id,
-            content: r.content,
-            replies: sqlx::query!("SELECT content FROM replies WHERE post_id = ?", r.id)
+            content: r.content.unwrap(),
+            replies: sqlx::query!("SELECT generations.content FROM replies LEFT JOIN generations ON generations.id = replies.generation_id WHERE post_id = ?", r.id)
                 .fetch_all(&s.db_pool)
                 .await
                 .unwrap()
                 .into_iter()
-                .map(|r| r.content)
+                .map(|r| r.content.unwrap())
                 .collect(),
         }),
     )

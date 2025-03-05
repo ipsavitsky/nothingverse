@@ -7,16 +7,18 @@
 ** TODO Make infinitely scrollable feed
 ** TODO CSS (tailwind? just inline my styles?)
 ** DONE Make post insubmittable before generation is done
-** TODO Bundling (Do I even need it? How do I pair it with nix?)
+** IDEA Bundling (Do I even need it? How do I pair it with nix?)
 ** TODO Nix service definition
 ** TODO Write a readme
-** TODO Decied if we need a custom generation sse handler
+** IDEA Decide if we need a custom generation sse handler
 Currently, the server grows the string out of generation tokens, but what if we only send the tokens and grow the string on the frontend and backend.
 ** TODO Known issues
 *** DONE After sse stream is closed, the connection gets dropped from the pool, which is not good
 *** DONE All 3 buttons submit the same first post
-*** TODO XSS attack is possible
+*** HOLD XSS attack is possible
 The frontend should not be the source of truth for the post content. Ideally, the frontend post and reply buttons should only send the post number (a generation UUID, perhaps?), so that I can't just submit anything on the ~/submit_*~ endpoint.
 On the second thought, ~/generate_*~ endpoints should write to the generation table, and posts and replies should join on generation id. No UUID requred and no frontend state.
+**** I have implemented the generations table - but is it safe? I can still reply with any post in that table. I guess that's better at least
 *** TODO Code duplication - LOADS of code duplicated, just take a look at index.rs and new_posts.rs
 *** TODO Some naming convention connecting template <-> implementation would be nice
+*** TODO The website name. As I import the logo html unedited - this proves a big problem as it also imports the title
