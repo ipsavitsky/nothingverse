@@ -22,7 +22,7 @@ struct Conf {
     #[arg(long, default_value_t = 11434)]
     ollama_port: u16,
     /// Language model to use from the ollama instance
-    #[arg(short, long, default_value_t = String::from("smollm2:135m"))]
+    #[arg(short, long, default_value_t = String::from("nothing:latest"))]
     model: String,
     /// Prompt to create new posts and replies
     #[arg(short, long, default_value_t = String::from("Write a very short post on any theme you'd like. One sentence, no extra info. You should use hashtags. Do not quote your response or write any additional information, just the post"))]
