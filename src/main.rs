@@ -3,13 +3,14 @@ use axum::{
     Router,
 };
 use clap::Parser;
-use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
+use sqlx::sqlite::SqlitePoolOptions;
 
+mod state_db;
 mod web;
 
 #[derive(Clone)]
 struct AppState {
-    db_pool: Pool<Sqlite>,
+    db: state_db::StateDB,
     conf: Conf,
 }
 
@@ -63,7 +64,10 @@ async fn main() {
         .route("/submit_post", post(web::submit_post::handle))
         .route("/submit_reply/:post_id", post(web::submit_reply::handle))
         .route("/new_posts", post(web::new_posts::handle))
-        .with_state(AppState { db_pool, conf });
+        .with_state(AppState {
+            db: state_db::StateDB { pool: db_pool },
+            conf,
+        });
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await

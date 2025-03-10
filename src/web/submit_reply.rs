@@ -15,7 +15,7 @@ pub struct CreateReplyButtonTemplate {
 
 #[derive(Deserialize)]
 pub struct PostData {
-    generation_id: String,
+    generation_id: i64,
 }
 
 #[derive(Deserialize)]
@@ -29,12 +29,6 @@ pub async fn handle(
     Form(f): Form<PostData>,
 ) -> CreateReplyButtonTemplate {
     tracing::info!("Creating new reply to post: {}", f.generation_id);
-    let _ = sqlx::query!(
-        "INSERT INTO replies (generation_id, post_id) VALUES (?, ?)",
-        f.generation_id,
-        p.post_id
-    )
-    .execute(&s.db_pool)
-    .await;
+    s.db.write_reply(f.generation_id, p.post_id).await;
     CreateReplyButtonTemplate { post_id: p.post_id }
 }

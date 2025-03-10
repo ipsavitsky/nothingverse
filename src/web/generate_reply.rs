@@ -27,31 +27,18 @@ pub struct PathData {
     post_id: i64,
 }
 
-struct PostData {
-    content: String,
-}
-
 pub async fn handle(
     Path(p): Path<PathData>,
     State(s): State<AppState>,
 ) -> Sse<impl Stream<Item = Result<Event, OllamaError>>> {
-    let post = sqlx::query!(
-        "SELECT generations.content FROM posts LEFT JOIN generations ON posts.generation_id = generations.id WHERE posts.id = ?",
-        p.post_id
-    )
-    .fetch_one(&s.db_pool)
-    .await
-    .map(|r| PostData {
-        content: r.content.unwrap(),
-    })
-    .unwrap();
+    let post_content = s.db.get_content_by_post_id(p.post_id).await;
 
     let ollama = Ollama::new(s.conf.ollama_url, s.conf.ollama_port);
     let mut res = String::new();
     let stream = ollama
         .generate_stream(GenerationRequest::new(
             s.conf.model,
-            format!("Write a good reply to the following post: {}", post.content),
+            format!("Write a good reply to the following post: {}", post_content),
         ))
         .await
         .unwrap()
@@ -59,15 +46,8 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
-                    let generation_id = futures::executor::block_on(
-                        sqlx::query!(
-                            "INSERT INTO generations (content) VALUES (?) RETURNING id",
-                            res
-                        )
-                        .fetch_one(&s.db_pool),
-                    )
-                    .map(|r| r.id)
-                    .unwrap();
+                    let generation_id =
+                        futures::executor::block_on(s.db.clone().write_generation(res.clone()));
 
                     res = ReplyButton {
                         generation_id,

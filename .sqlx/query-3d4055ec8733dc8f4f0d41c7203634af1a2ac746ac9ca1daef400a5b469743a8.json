@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT\n             posts.id,\n             generations.content\n           FROM posts\n           LEFT JOIN generations ON posts.generation_id = generations.id\n           WHERE posts.id > ?\n           ORDER BY posts.timestamp DESC",
+  "query": "\nSELECT\n  posts.id,\n  generations.content\nFROM posts\nLEFT JOIN generations ON generations.id = posts.generation_id\nWHERE posts.id > ?\nORDER BY posts.timestamp DESC",
   "describe": {
     "columns": [
       {
@@ -22,5 +22,5 @@
       true
     ]
   },
-  "hash": "e0b674c669c9c276fc004ba28b1f4e92ff262591a59abdc08966d917e45dab6f"
+  "hash": "3d4055ec8733dc8f4f0d41c7203634af1a2ac746ac9ca1daef400a5b469743a8"
 }

@@ -33,15 +33,8 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
-                    let generation_id = futures::executor::block_on(
-                        sqlx::query!(
-                            "INSERT INTO generations (content) VALUES (?) RETURNING id",
-                            res
-                        )
-                        .fetch_one(&s.db_pool),
-                    )
-                    .map(|r| r.id)
-                    .unwrap();
+                    let generation_id =
+                        futures::executor::block_on(s.db.clone().write_generation(res.clone()));
 
                     res = PostButton {
                         generation_id,

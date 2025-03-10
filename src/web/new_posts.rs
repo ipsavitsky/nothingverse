@@ -2,14 +2,7 @@ use askama::Template;
 use axum::{extract::State, Form};
 use serde::Deserialize;
 
-use crate::AppState;
-
-#[derive(Default)]
-pub struct Post {
-    id: i64,
-    content: String,
-    replies: Vec<String>,
-}
+use crate::{state_db::models::Post, AppState};
 
 #[derive(Template)]
 #[template(path = "new_posts.html")]
@@ -24,44 +17,10 @@ pub struct NewPostData {
 }
 
 pub async fn handle(State(s): State<AppState>, Form(form): Form<NewPostData>) -> PostsTemplate {
-    let posts: Vec<Post> = futures::future::join_all(
-        sqlx::query!(
-            r#"SELECT
-             posts.id,
-             generations.content
-           FROM posts
-           LEFT JOIN generations ON posts.generation_id = generations.id
-           WHERE posts.id > ?
-           ORDER BY posts.timestamp DESC"#,
-            form.after
-        )
-        .fetch_all(&s.db_pool)
-        .await
-        .unwrap()
-        .into_iter()
-        .map(async |r| Post {
-            id: r.id,
-            content: r.content.unwrap(),
-            replies: sqlx::query!("SELECT generations.content FROM replies LEFT JOIN generations ON generations.id = replies.generation_id WHERE post_id = ?", r.id)
-                .fetch_all(&s.db_pool)
-                .await
-                .unwrap()
-                .into_iter()
-                .map(|r| r.content.unwrap())
-                .collect(),
-        }),
-    )
-    .await;
+    let posts = s.db.get_posts_after_id(form.after).await;
 
     PostsTemplate {
-        after_id: posts
-            .first()
-            .unwrap_or(&Post {
-                id: form.after,
-                content: String::new(),
-                replies: Vec::default(),
-            })
-            .id,
+        after_id: posts.first().map(|x| x.id).unwrap_or(form.after),
         new_posts: posts,
     }
 }

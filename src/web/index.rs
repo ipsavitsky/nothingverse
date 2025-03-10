@@ -3,12 +3,7 @@ use axum::extract::State;
 
 use crate::AppState;
 
-#[derive(Default)]
-pub struct Post {
-    id: i64,
-    content: String,
-    replies: Vec<String>,
-}
+use crate::state_db::models::Post;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -18,35 +13,10 @@ pub struct IndexTemplate {
 }
 
 pub async fn handle(State(s): State<AppState>) -> IndexTemplate {
-    let posts: Vec<Post> = futures::future::join_all(
-        sqlx::query!(
-            r#"SELECT
-             posts.id,
-             generations.content
-           FROM posts
-           LEFT JOIN generations ON generations.id = posts.generation_id
-           ORDER BY timestamp DESC LIMIT 10"#
-        )
-        .fetch_all(&s.db_pool)
-        .await
-        .unwrap()
-        .into_iter()
-        .map(async |r| Post {
-            id: r.id,
-            content: r.content.unwrap(),
-            replies: sqlx::query!("SELECT generations.content FROM replies LEFT JOIN generations ON generations.id = replies.generation_id WHERE post_id = ?", r.id)
-                .fetch_all(&s.db_pool)
-                .await
-                .unwrap()
-                .into_iter()
-                .map(|r| r.content.unwrap())
-                .collect(),
-        }),
-    )
-    .await;
+    let posts = s.db.get_latest_posts().await;
 
     IndexTemplate {
-        after_id: posts.first().unwrap_or(&Post::default()).id,
+        after_id: posts.first().map(|x| x.id).unwrap_or(0),
         new_posts: posts,
     }
 }
