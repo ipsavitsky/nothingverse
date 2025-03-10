@@ -1,10 +1,11 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use axum::{extract::State, Form};
 use serde::Deserialize;
 
 use crate::{state_db::models::Post, AppState};
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "new_posts.html")]
 pub struct PostsTemplate {
     after_id: i64,

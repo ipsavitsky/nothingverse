@@ -1,11 +1,12 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use axum::extract::State;
 
 use crate::AppState;
 
 use crate::state_db::models::Post;
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "index.html")]
 pub struct IndexTemplate {
     new_posts: Vec<Post>,

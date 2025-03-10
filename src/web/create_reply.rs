@@ -1,8 +1,9 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use axum::extract::Path;
 use serde::Deserialize;
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "new_reply.html")]
 pub struct NewReplyTemplate {
     index: u32,

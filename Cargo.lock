@@ -145,6 +145,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "askama_web"
+version = "0.0.1-pre.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bdbaf4bc664799add7574b2966081c7d22a917c62f00331f91b64e40072e0325"
+dependencies = [
+ "askama",
+ "askama_web_derive",
+ "axum-core 0.5.0",
+ "http",
+ "tracing",
+]
+
+[[package]]
+name = "askama_web_derive"
+version = "0.0.1-pre.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0c0ec76008364e27c35ad21d418af8755508a0b2cecc0c2954eaaf89242cbf4"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "async-stream"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -194,14 +218,14 @@ checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 
 [[package]]
 name = "axum"
-version = "0.7.9"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f"
+checksum = "6d6fd624c75e18b3b4c6b9caf42b1afe24437daaee904069137d8bab077be8b8"
 dependencies = [
- "async-trait",
- "axum-core 0.4.5",
+ "axum-core 0.5.0",
  "axum-macros",
  "bytes",
+ "form_urlencoded",
  "futures-util",
  "http",
  "http-body",
@@ -245,7 +269,6 @@ dependencies = [
  "sync_wrapper",
  "tower-layer",
  "tower-service",
- "tracing",
 ]
 
 [[package]]
@@ -265,13 +288,14 @@ dependencies = [
  "sync_wrapper",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]
 name = "axum-macros"
-version = "0.4.2"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57d123550fa8d071b7255cb0cc04dc302baa6c8c4a79f55701552684d8399bce"
+checksum = "604fde5e028fea851ce1d8570bbdc034bec850d157f7569d10f347d06808c05c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1201,9 +1225,9 @@ checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
 
 [[package]]
 name = "matchit"
-version = "0.7.3"
+version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e7465ac9959cc2b1404e8e2367b43684a6d13790fe23056cc8c6c5a6b7bcb94"
+checksum = "47e1ffaa40ddd1f3ed91f717a33c8c0ee23fff369e3aa8772b9605cc1d22f4c3"
 
 [[package]]
 name = "md-5"
@@ -1297,6 +1321,7 @@ dependencies = [
  "askama",
  "askama-derive-axum",
  "askama_axum",
+ "askama_web",
  "axum",
  "clap",
  "futures",

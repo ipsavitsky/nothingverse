@@ -30,5 +30,5 @@ https://rinja-rs.github.io/askama/
 ** TODO Some naming convention connecting template <-> implementation would be nice
 ** TODO The website name. As I import the logo html unedited - this proves a big problem as it also imports the title
 ** TODO Improve error handling, get rid of most unwrap() calls in favor of Result<> or expect()
-** TODO Monitor the update to latest axum
+** DONE Monitor the update to latest axum
 Currently held back by https://github.com/rinja-rs/askama/issues/1128

@@ -1,10 +1,11 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use axum::{extract::State, Form};
 use serde::Deserialize;
 
 use crate::AppState;
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "create_post_button.html")]
 pub struct CreatePostButtonTemplate {}
 

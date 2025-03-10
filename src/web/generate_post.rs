@@ -1,4 +1,5 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use axum::{
     extract::State,
     response::{
@@ -13,7 +14,7 @@ use tokio_stream::StreamExt;
 
 use crate::AppState;
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "post_button.html")]
 struct PostButton {
     generation_id: i64,
