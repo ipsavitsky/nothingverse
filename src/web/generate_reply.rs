@@ -62,11 +62,9 @@ pub async fn handle(
             Ok(Event::default().data(&res).event("generation_chunk"))
         });
 
-    // This is needed so that the sse stream never gets dropped. HTMX is desinged to reconnect upon dropped stream to maintain consistency, but that is not what we want
-    let infinite_stream =
-        stream::repeat_with(|| Ok(Event::default())).throttle(Duration::from_secs(60));
+    let ending_event = stream::once(async { Ok(Event::default().data("").event("close")) });
 
-    Sse::new(stream.merge(infinite_stream)).keep_alive(
+    Sse::new(stream.chain(ending_event)).keep_alive(
         KeepAlive::new()
             .interval(Duration::from_secs(1))
             .text("Keep-alive"),
