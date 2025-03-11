@@ -1,4 +1,5 @@
 use axum::{
+    http::header,
     routing::{get, post},
     Router,
 };
@@ -67,6 +68,23 @@ async fn main() {
         .route("/submit_post", post(web::submit_post::handle))
         .route("/submit_reply/{post_id}", post(web::submit_reply::handle))
         .route("/new_posts", post(web::new_posts::handle))
+        .route_service(
+            "/styles.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css")],
+                    include_str!("../templates/styles.css"),
+                )
+            }),
+        )
+        .route_service(
+            "/htmx.min.js",
+            get(|| async { include_str!("../templates/assets/htmx.min.js") }),
+        )
+        .route_service(
+            "/sse.min.js",
+            get(|| async { include_str!("../templates/assets/sse.min.js") }),
+        )
         .with_state(AppState {
             db: state_db::StateDB { pool: db_pool },
             conf,
