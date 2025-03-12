@@ -30,7 +30,7 @@
           inherit system;
           overlays = [ (import rust-overlay) ];
         };
-        naersk-lib = naersk.lib.${system}.override {
+        naersk-lib = pkgs.callPackage naersk {
           cargo = pkgs.rust-bin.stable.latest.default;
           rustc = pkgs.rust-bin.stable.latest.default;
         };
