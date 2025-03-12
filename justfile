@@ -23,3 +23,8 @@ pull_htmx:
 
 watch:
     watchexec -r -- "just make_styles; cargo run"
+
+lint: make_database
+    -nix flake check
+    -statix check .
+    -cargo clippy

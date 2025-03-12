@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     naersk.url = "github:nix-community/naersk";
     flake-utils.url = "github:numtide/flake-utils";
+    statix.url = "github:oppiliappan/statix";
     rust-overlay.url = "github:oxalica/rust-overlay";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -16,6 +17,7 @@
       nixpkgs,
       flake-utils,
       naersk,
+      statix,
       rust-overlay,
       treefmt-nix,
     }:
@@ -88,6 +90,7 @@
               sqlite
               tailwindcss_4
               rust-bin.stable.latest.default
+              statix.packages.${pkgs.system}.default
             ];
           };
         };

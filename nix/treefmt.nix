@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   projectRootFile = "flake.nix";
   settings.global.excludes = [
     ".sqlx/*"
@@ -9,12 +8,14 @@
     # sqlfluff is broken on this file for some reason
     "migrations/20250228190941_replies_table.sql"
   ];
-  programs.nixfmt.enable = true;
-  programs.rustfmt.enable = true;
-  programs.shfmt.enable = true;
-  programs.sqlfluff = {
-    enable = true;
-    dialect = "sqlite";
+  programs = {
+    nixfmt.enable = true;
+    rustfmt.enable = true;
+    shfmt.enable = true;
+    sqlfluff = {
+      enable = true;
+      dialect = "sqlite";
+    };
+    prettier.enable = true;
   };
-  programs.prettier.enable = true;
 }
