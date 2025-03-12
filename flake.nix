@@ -4,6 +4,7 @@
     naersk.url = "github:nix-community/naersk";
     flake-utils.url = "github:numtide/flake-utils";
     statix.url = "github:oppiliappan/statix";
+    nom.url = "github:maralorn/nix-output-monitor";
     rust-overlay.url = "github:oxalica/rust-overlay";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -18,6 +19,7 @@
       flake-utils,
       naersk,
       statix,
+      nom,
       rust-overlay,
       treefmt-nix,
     }:
@@ -91,6 +93,7 @@
               tailwindcss_4
               rust-bin.stable.latest.default
               statix.packages.${pkgs.system}.default
+              nom.packages.${pkgs.system}.default
             ];
           };
         };
