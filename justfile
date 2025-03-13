@@ -28,6 +28,3 @@ lint: make_database
     -nix flake check
     -statix check .
     -cargo clippy
-
-build_nom:
-    nom build
