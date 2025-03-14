@@ -79,11 +79,21 @@ async fn main() {
         )
         .route_service(
             "/htmx.min.js",
-            get(|| async { include_str!("../templates/assets/htmx.min.js") }),
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript")],
+                    include_str!("../templates/assets/htmx.min.js"),
+                )
+            }),
         )
         .route_service(
             "/sse.min.js",
-            get(|| async { include_str!("../templates/assets/sse.min.js") }),
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript")],
+                    include_str!("../templates/assets/sse.min.js"),
+                )
+            }),
         )
         .with_state(AppState {
             db: state_db::StateDB { pool: db_pool },

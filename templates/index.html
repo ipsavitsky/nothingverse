@@ -5,9 +5,11 @@
   <link href="styles.css" rel="stylesheet" />
 </head>
 
-<body>
-  <div class="flex items-center justify-center">{% include "logo.html" %}</div>
-  <div id="post_area">{% include "create_post_button.html" %}</div>
+<body class="centered">
+  <div class="centered">Welcome to {% include "logo.html" %}</div>
+  <div class="centered border rounded-md" id="post_area">
+    {% include "create_post_button.html" %}
+  </div>
 
   {% include "new_posts.html" %}
 </body>

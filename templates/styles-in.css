@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.btn {
+  @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded-full;
+}
+
+.centered {
+  @apply flex flex-col justify-center items-center;
+}
