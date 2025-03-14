@@ -5,8 +5,11 @@
   <link href="styles.css" rel="stylesheet" />
 </head>
 
-<body class="centered">
-  <div class="centered">Welcome to {% include "logo.html" %}</div>
+<body class="centered text-lg">
+  <div class="centered">
+    <p class="text-3xl font-medium">Welcome to </p>
+    {% include "logo.html" %}
+  </div>
   <div class="centered m-2" id="post_area">
     {% include "create_post_button.html" %}
   </div>
