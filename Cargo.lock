@@ -146,9 +146,9 @@ dependencies = [
 
 [[package]]
 name = "askama_web"
-version = "0.0.1-pre.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdbaf4bc664799add7574b2966081c7d22a917c62f00331f91b64e40072e0325"
+checksum = "74e2866b0a7200055690d3e5a0959a02bb1983a328d03427aba5775257505a8b"
 dependencies = [
  "askama",
  "askama_web_derive",
@@ -159,9 +159,9 @@ dependencies = [
 
 [[package]]
 name = "askama_web_derive"
-version = "0.0.1-pre.0"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0c0ec76008364e27c35ad21d418af8755508a0b2cecc0c2954eaaf89242cbf4"
+checksum = "34921de3d57974069bad483fdfe0ec65d88c4ff892edd1ab4d8b03be0dda1b9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1332,7 +1332,6 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "tracing-subscriber",
- "version_check",
 ]
 
 [[package]]

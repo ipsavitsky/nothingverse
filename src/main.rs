@@ -104,8 +104,6 @@ async fn main() {
         .await
         .unwrap();
 
-    let triple = version_check::triple().unwrap();
-    tracing::info!("Compiled with {}.{}.{}", triple.0, triple.1, triple.2);
     tracing::info!("starting server");
     axum::serve(listener, app).await.unwrap();
 }
