@@ -64,7 +64,7 @@
               toilet
               tailwindcss_4
             ];
-            overrideMain = old: {
+            overrideMain = _: {
               preBuild = ''
                 # for some reason I have to symlink or toilet can't open the font
                 tailwindcss -i ./templates/styles-in.css -o ./templates/styles.css
@@ -98,5 +98,10 @@
           };
         };
       }
-    );
+    )
+    // {
+      nixosModules = {
+        nothingverse = import ./nix/service.nix { nothingverse = self.packages; };
+      };
+    };
 }
