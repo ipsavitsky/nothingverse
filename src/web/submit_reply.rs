@@ -8,6 +8,8 @@ use serde::Deserialize;
 
 use crate::AppState;
 
+use super::error::WebError;
+
 #[derive(Template, WebTemplate)]
 #[template(path = "create_reply_button.html")]
 pub struct CreateReplyButtonTemplate {
@@ -28,8 +30,8 @@ pub async fn handle(
     Path(p): Path<PathData>,
     State(s): State<AppState>,
     Form(f): Form<PostData>,
-) -> CreateReplyButtonTemplate {
+) -> Result<CreateReplyButtonTemplate, WebError> {
     tracing::info!("Creating new reply to post: {}", f.generation_id);
-    s.db.write_reply(f.generation_id, p.post_id).await;
-    CreateReplyButtonTemplate { post_id: p.post_id }
+    s.db.write_reply(f.generation_id, p.post_id).await?;
+    Ok(CreateReplyButtonTemplate { post_id: p.post_id })
 }

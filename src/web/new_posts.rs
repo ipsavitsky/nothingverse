@@ -5,6 +5,8 @@ use serde::Deserialize;
 
 use crate::{state_db::models::Post, AppState};
 
+use super::error::WebError;
+
 #[derive(Template, WebTemplate)]
 #[template(path = "new_posts.html")]
 pub struct PostsTemplate {
@@ -17,11 +19,14 @@ pub struct NewPostData {
     after: i64,
 }
 
-pub async fn handle(State(s): State<AppState>, Form(form): Form<NewPostData>) -> PostsTemplate {
-    let posts = s.db.get_posts_after_id(form.after).await;
+pub async fn handle(
+    State(s): State<AppState>,
+    Form(form): Form<NewPostData>,
+) -> Result<PostsTemplate, WebError> {
+    let posts = s.db.get_posts_after_id(form.after).await?;
 
-    PostsTemplate {
+    Ok(PostsTemplate {
         after_id: posts.first().map(|x| x.id).unwrap_or(form.after),
         new_posts: posts,
-    }
+    })
 }

@@ -54,7 +54,7 @@ async fn main() {
         .await
         .unwrap();
 
-    sqlx::migrate!().run(&db_pool).await.unwrap();
+    sqlx::migrate!().run(&db_pool).await.expect("Could not run migrations");
 
     let app = Router::new()
         .route("/", get(web::index::handle))
@@ -102,8 +102,8 @@ async fn main() {
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
         .await
-        .unwrap();
+        .expect("Could not bind address");
 
     tracing::info!("starting server");
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app).await.expect("Could now start server");
 }

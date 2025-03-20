@@ -1,5 +1,6 @@
 pub mod create_post;
 pub mod create_reply;
+pub mod error;
 pub mod generate_post;
 pub mod generate_reply;
 pub mod index;
