@@ -4,7 +4,7 @@ make_database: make_styles pull_htmx make_logo
     scripts/init_db_if_missing.sh
 
 make_logo: pull_font
-    toilet -f resources/chunky.flf "nothingverse" --html > templates/logo.html
+    toilet -f resources/chunky.flf "nothingverse" --html | htmlq 'body' > templates/logo.html
 
 pull_font:
     mkdir -p resources

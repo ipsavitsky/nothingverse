@@ -58,7 +58,11 @@ impl StateDB {
 
     pub async fn get_content_by_post_id(&self, id: i64) -> Result<String, DBError> {
         sqlx::query!(
-            "SELECT generations.content FROM posts LEFT JOIN generations ON posts.generation_id = generations.id WHERE posts.id = ?",
+            "
+SELECT generations.content
+FROM posts
+LEFT JOIN generations ON posts.generation_id = generations.id
+WHERE posts.id = ?",
             id
         )
         .fetch_one(&self.pool)
@@ -68,7 +72,11 @@ impl StateDB {
 
     // TODO this should return Result<Vec<Result<String, DBError>, DBError>
     pub async fn get_replies_by_post_id(&self, id: i64) -> Result<Vec<String>, DBError> {
-        sqlx::query!("SELECT replies.id, generations.content FROM replies LEFT JOIN generations ON generations.id = replies.generation_id WHERE replies.post_id = ?", id)
+        sqlx::query!("
+SELECT replies.id, generations.content
+FROM replies
+LEFT JOIN generations ON generations.id = replies.generation_id
+WHERE replies.post_id = ?", id)
                     .fetch_all(&self.pool)
                     .await?
                     .into_iter()

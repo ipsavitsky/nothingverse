@@ -62,6 +62,7 @@
             src = ./.;
             nativeBuildInputs = with pkgs; [
               toilet
+              htmlq
               tailwindcss_4
             ];
             overrideMain = _: {
@@ -72,7 +73,7 @@
                 mkdir -p templates/assets/
                 ln -s ${htmx_org} templates/assets/htmx.min.js
                 ln -s ${htmx_ext_sse} templates/assets/sse.min.js
-                toilet -f ./chunky.flf nothingverse --html > templates/logo.html
+                toilet -f ./chunky.flf nothingverse --html | htmlq 'body' > templates/logo.html
               '';
               SQLX_OFFLINE = true;
             };
@@ -92,6 +93,7 @@
               sqlx-cli
               sqlite
               tailwindcss_4
+              htmlq
               rust-bin.stable.latest.default
               statix.packages.${pkgs.system}.default
             ];

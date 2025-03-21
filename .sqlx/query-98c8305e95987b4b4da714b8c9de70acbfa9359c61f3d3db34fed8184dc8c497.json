@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\nSELECT\n  posts.id,\n  generations.content\nFROM posts\nLEFT JOIN generations ON generations.id = posts.generation_id\nWHERE posts.id < ?\nORDER BY posts.timestamp DESC\nLIMIT 10",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      true
+    ]
+  },
+  "hash": "98c8305e95987b4b4da714b8c9de70acbfa9359c61f3d3db34fed8184dc8c497"
+}
