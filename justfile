@@ -22,7 +22,7 @@ pull_htmx:
      wget https://unpkg.com/htmx-ext-sse@2.2.3/dist/sse.min.js -O ./templates/assets/sse.min.js
 
 watch:
-    watchexec -r -- "just make_styles; cargo run"
+    watchexec -r -- "just make_styles; cargo run -- --log-level debug"
 
 lint: make_database
     -nix flake check

@@ -72,16 +72,19 @@ WHERE posts.id = ?",
 
     // TODO this should return Result<Vec<Result<String, DBError>, DBError>
     pub async fn get_replies_by_post_id(&self, id: i64) -> Result<Vec<String>, DBError> {
-        sqlx::query!("
+        sqlx::query!(
+            "
 SELECT replies.id, generations.content
 FROM replies
 LEFT JOIN generations ON generations.id = replies.generation_id
-WHERE replies.post_id = ?", id)
-                    .fetch_all(&self.pool)
-                    .await?
-                    .into_iter()
-                    .map(|r| r.content.ok_or(DBError::MissingGeneration))
-                    .collect()
+WHERE replies.post_id = ?",
+            id
+        )
+        .fetch_all(&self.pool)
+        .await?
+        .into_iter()
+        .map(|r| r.content.ok_or(DBError::MissingGeneration))
+        .collect()
     }
 
     pub async fn get_latest_posts(&self) -> Result<Vec<models::Post>, DBError> {

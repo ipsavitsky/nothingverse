@@ -15,12 +15,14 @@ in
       inherit (nothingverse.${config.nixpkgs.system}) default;
     };
 
-    ollama_url = lib.mkOption {
+    url = lib.mkOption {
       type = lib.types.str;
+      default = "http://localhost:5000";
     };
 
-    ollama_port = lib.mkOption {
-      type = lib.types.port;
+    ollamaUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http://localhost:11434";
     };
 
     model = lib.mkOption {
@@ -28,11 +30,11 @@ in
       default = "nothingverse";
     };
 
-    db_url = lib.mkOption {
+    dataDir = lib.mkOption {
       type = lib.types.path;
     };
 
-    log_level = lib.mkOption {
+    logLevel = lib.mkOption {
       type = lib.types.str;
       default = "INFO";
     };
@@ -43,11 +45,11 @@ in
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}
-            --ollama-url ${cfg.ollama_url}
-            --ollama-port ${toString cfg.ollama_port}
+            --url ${cfg.url}
+            --ollama-url ${cfg.ollamaUrl}
             --model ${cfg.model}
-            --db-url ${cfg.db_url}
-            --log-level ${cfg.log_level}
+            --db-url ${cfg.dataDir}/nothing.sqlite
+            --log-level ${cfg.logLevel}
         '';
       };
     };

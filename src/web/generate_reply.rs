@@ -36,7 +36,7 @@ pub async fn handle(
 ) -> Result<Sse<impl Stream<Item = Result<Event, GenerationError>>>, WebError> {
     let post_content = s.db.get_content_by_post_id(p.post_id).await?;
 
-    let ollama = Ollama::new(s.conf.ollama_url, s.conf.ollama_port);
+    let ollama = Ollama::from_url(s.conf.ollama_url);
     let mut res = String::new();
     let stream = ollama
         .generate_stream(GenerationRequest::new(

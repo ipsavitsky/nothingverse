@@ -5,7 +5,7 @@ use axum::{
 };
 use clap::Parser;
 use sqlx::sqlite::SqlitePoolOptions;
-
+use url::Url;
 mod state_db;
 mod web;
 
@@ -17,12 +17,12 @@ struct AppState {
 
 #[derive(Parser, Clone)]
 struct Conf {
+    /// App url
+    #[arg(long, default_value_t = Url::parse("http://localhost:5000").unwrap())]
+    url: Url,
     /// Ollama URL
-    #[arg(long, default_value_t = String::from("http://localhost"))]
-    ollama_url: String,
-    /// Ollama port
-    #[arg(long, default_value_t = 11434)]
-    ollama_port: u16,
+    #[arg(long, default_value_t = Url::parse("http://localhost:11434").unwrap())]
+    ollama_url: Url,
     /// Language model to use from the ollama instance
     #[arg(short, long, default_value_t = String::from("nothing:latest"))]
     model: String,
@@ -52,7 +52,7 @@ async fn main() {
     let db_pool = SqlitePoolOptions::new()
         .connect(&conf.db_url)
         .await
-        .unwrap();
+        .expect("Could not create connection pool");
 
     sqlx::migrate!()
         .run(&db_pool)
@@ -101,12 +101,16 @@ async fn main() {
         )
         .with_state(AppState {
             db: state_db::StateDB { pool: db_pool },
-            conf,
+            conf: conf.clone(),
         });
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:5000")
-        .await
-        .expect("Could not bind address");
+    let listener = tokio::net::TcpListener::bind(format!(
+        "{}:{}",
+        conf.url.host().unwrap(),
+        conf.url.port().unwrap()
+    ))
+    .await
+    .expect("Could not bind address");
 
     tracing::info!("starting server");
     axum::serve(listener, app)
