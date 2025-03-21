@@ -78,6 +78,10 @@
               SQLX_OFFLINE = true;
             };
           };
+          modelfile = pkgs.writeTextFile {
+            name = "modelfile";
+            text = builtins.readFile ./ollama/nothing.modelfile;
+          };
         };
 
         devShells = {
