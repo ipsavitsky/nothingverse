@@ -132,4 +132,34 @@ ORDER BY posts.timestamp DESC",
         .into_iter()
         .collect()
     }
+
+    pub async fn get_posts_before_id(&self, before_id: i64) -> Result<Vec<models::Post>, DBError> {
+        futures::future::join_all(
+            sqlx::query!(
+                "
+SELECT
+  posts.id,
+  generations.content
+FROM posts
+LEFT JOIN generations ON generations.id = posts.generation_id
+WHERE posts.id < ?
+ORDER BY posts.timestamp DESC
+LIMIT 10",
+                before_id
+            )
+            .fetch_all(&self.pool)
+            .await?
+            .into_iter()
+            .map(async |r| {
+                Ok(models::Post {
+                    id: r.id,
+                    content: r.content.ok_or(DBError::MissingGeneration)?,
+                    replies: self.get_replies_by_post_id(r.id).await?,
+                })
+            }),
+        )
+        .await
+        .into_iter()
+        .collect()
+    }
 }

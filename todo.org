@@ -4,7 +4,7 @@
 ** DONE Query and display correctly
 ** TODO Make them update correctly
 So I doubt that I'll need to do the complicated polling mechanism I have for posts - too many connections to uphold. I would rather have reply be inserted by htmx upon generating and then pull *ALL* replies when reloading the page.
-* TODO Make infinitely scrollable feed
+* DONE Make infinitely scrollable feed
 * DONE CSS (tailwind? just inline my styles?)
 ** KILL Bundling (Do I even need it? How do I pair it with nix?)
 * DONE Make post insubmittable before generation is done
@@ -26,8 +26,8 @@ I have implemented the generations table - but is it safe? I can still reply wit
 *** TODO Templating code still needs a rework
 A lot of templates are including other templates and require some rereading of data. This may be avoided with blocks maybe (?)
 https://rinja-rs.github.io/askama/
-*** TODO The code of templates themselves needs to be cleaned up, it's very messy
-** TODO Some naming convention connecting template <-> implementation would be nice
+*** DONE The code of templates themselves needs to be cleaned up, it's very messy
+** KILL Some naming convention connecting template <-> implementation would be nice
 ** TODO The website name. As I import the logo html unedited - this proves a big problem as it also imports the title
 ** DONE Improve error handling, get rid of most unwrap() calls in favor of Result<> or expect()
 ** DONE Monitor the update to latest axum

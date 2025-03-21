@@ -11,8 +11,11 @@ use super::error::WebError;
 #[derive(Template, WebTemplate)]
 #[template(path = "index.html")]
 pub struct IndexTemplate {
-    new_posts: Vec<Post>,
+    posts: Vec<Post>,
     after_id: i64,
+    before_id: i64,
+    old_posts: Vec<Post>,
+    new_posts: Vec<Post>,
 }
 
 pub async fn handle(State(s): State<AppState>) -> Result<IndexTemplate, WebError> {
@@ -20,6 +23,9 @@ pub async fn handle(State(s): State<AppState>) -> Result<IndexTemplate, WebError
 
     Ok(IndexTemplate {
         after_id: posts.first().map(|x| x.id).unwrap_or(0),
-        new_posts: posts,
+        before_id: posts.last().map(|x| x.id).unwrap_or(0),
+        posts,
+        old_posts: Vec::new(),
+        new_posts: Vec::new(),
     })
 }

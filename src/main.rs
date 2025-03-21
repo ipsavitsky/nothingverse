@@ -54,7 +54,10 @@ async fn main() {
         .await
         .unwrap();
 
-    sqlx::migrate!().run(&db_pool).await.expect("Could not run migrations");
+    sqlx::migrate!()
+        .run(&db_pool)
+        .await
+        .expect("Could not run migrations");
 
     let app = Router::new()
         .route("/", get(web::index::handle))
@@ -67,7 +70,8 @@ async fn main() {
         )
         .route("/submit_post", post(web::submit_post::handle))
         .route("/submit_reply/{post_id}", post(web::submit_reply::handle))
-        .route("/new_posts", post(web::new_posts::handle))
+        .route("/new_posts", get(web::new_posts::handle))
+        .route("/old_posts", get(web::old_posts::handle))
         .route_service(
             "/styles.css",
             get(|| async {
@@ -105,5 +109,7 @@ async fn main() {
         .expect("Could not bind address");
 
     tracing::info!("starting server");
-    axum::serve(listener, app).await.expect("Could now start server");
+    axum::serve(listener, app)
+        .await
+        .expect("Could now start server");
 }

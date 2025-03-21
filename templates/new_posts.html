@@ -1,17 +1,7 @@
 <div
-  hx-post="/new_posts"
+  hx-get="/new_posts"
   hx-vals="js:{after:{{ after_id }}}"
   hx-trigger="every 2s"
   hx-swap="outerHTML"
 ></div>
-{% for post in new_posts %}
-<div class="w-1/2 m-1 p-1 border-2 rounded-md">
-  {{ post.content }} {% for reply in post.replies %}
-  <div class="m-1 p-1 border-1 rounded-md">{{ reply }}</div>
-  {% endfor %}
-  <div id="reply_area_{{ post.id }}">
-    {% let post_id = post.id %} {% include "create_reply_button.html" %}
-  </div>
-</div>
-<br />
-{% endfor %}
+{% for post in new_posts %} {% include "post.html" %} {% endfor %}
