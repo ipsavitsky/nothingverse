@@ -93,12 +93,12 @@ in
         User = cfg.user;
         Group = cfg.group;
       };
+
+      preStart = lib.mkIf cfg.installOllamaModel ''
+        ollama create nothing -f ${nothingverse.${config.nixpkgs.system}.modelfile}
+      '';
+
+      wantedBy = [ "multi-user.target" ];
     };
-
-    preStart = lib.mkIf cfg.installOllamaModel ''
-      ollama create nothing -f ${nothingverse.${config.nixpkgs.system}.modelfile}
-    '';
-
-    wantedBy = [ "multi-user.target" ];
   };
 }
