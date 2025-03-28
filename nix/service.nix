@@ -1,5 +1,6 @@
 { nothingverse }:
 {
+  pkgs,
   lib,
   config,
   ...
@@ -28,7 +29,7 @@ in
 
     model = lib.mkOption {
       type = lib.types.str;
-      default = "nothingverse";
+      default = "nothing";
     };
 
     dataDir = lib.mkOption {
@@ -55,11 +56,6 @@ in
       type = lib.types.str;
       default = "nothingverse";
     };
-
-    openFirewall = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -82,11 +78,11 @@ in
     systemd.services.nothingverse = {
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}
-            --url ${cfg.url}
-            --ollama-url ${cfg.ollamaUrl}
-            --model ${cfg.model}
-            --db-url ${cfg.dataDir}/nothing.sqlite
+          ${cfg.package}/bin/nothingverse \
+            --url ${cfg.url} \
+            --ollama-url ${cfg.ollamaUrl} \
+            --model ${cfg.model} \
+            --db-url ${cfg.dataDir}/nothing.sqlite \
             --log-level ${cfg.logLevel}
         '';
         Restart = "on-failure";
@@ -95,7 +91,7 @@ in
       };
 
       preStart = lib.mkIf cfg.installOllamaModel ''
-        ollama create nothing -f ${nothingverse.${config.nixpkgs.system}.modelfile}
+        ${pkgs.ollama}/bin/ollama create nothing -f ${nothingverse.${config.nixpkgs.system}.modelfile}
       '';
 
       wantedBy = [ "multi-user.target" ];

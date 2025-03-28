@@ -4,7 +4,7 @@ use axum::{
     Router,
 };
 use clap::Parser;
-use sqlx::sqlite::SqlitePoolOptions;
+use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Sqlite};
 use url::Url;
 mod state_db;
 mod web;
@@ -48,6 +48,11 @@ async fn main() {
         .with_thread_ids(true)
         .with_max_level(conf.log_level)
         .init();
+
+    if !Sqlite::database_exists(&conf.db_url).await.unwrap() {
+	tracing::warn!("database file {} not found, creating...", &conf.db_url);
+        Sqlite::create_database(&conf.db_url).await.unwrap();
+    }
 
     let db_pool = SqlitePoolOptions::new()
         .connect(&conf.db_url)
