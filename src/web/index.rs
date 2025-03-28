@@ -16,6 +16,7 @@ pub struct IndexTemplate {
     before_id: i64,
     old_posts: Vec<Post>,
     new_posts: Vec<Post>,
+    generated_reply: Option<String>,
 }
 
 pub async fn handle(State(s): State<AppState>) -> Result<IndexTemplate, WebError> {
@@ -27,5 +28,6 @@ pub async fn handle(State(s): State<AppState>) -> Result<IndexTemplate, WebError
         posts,
         old_posts: Vec::new(),
         new_posts: Vec::new(),
+        generated_reply: None,
     })
 }

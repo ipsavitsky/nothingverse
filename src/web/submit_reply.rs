@@ -14,6 +14,7 @@ use super::error::WebError;
 #[template(path = "create_reply_button.html")]
 pub struct CreateReplyButtonTemplate {
     post_id: i64,
+    generated_reply: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -33,5 +34,9 @@ pub async fn handle(
 ) -> Result<CreateReplyButtonTemplate, WebError> {
     tracing::info!("Creating new reply to post: {}", f.generation_id);
     s.db.write_reply(f.generation_id, p.post_id).await?;
-    Ok(CreateReplyButtonTemplate { post_id: p.post_id })
+    let generated_reply = s.db.get_content_by_generation_id(f.generation_id).await?;
+    Ok(CreateReplyButtonTemplate {
+        post_id: p.post_id,
+        generated_reply: Some(generated_reply),
+    })
 }

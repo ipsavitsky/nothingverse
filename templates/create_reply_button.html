@@ -1,7 +1,10 @@
-<button
-  class="btn"
-  hx-post="/create_reply/{{ post_id }}"
-  hx-target="#reply_area_{{ post_id }}"
->
-  Generate reply
-</button>
+{% if let Some(reply) = generated_reply %} {% include "reply.html" %} {% endif %}
+<div id="reply_area_{{ post_id }}">
+  <button
+    class="btn"
+    hx-post="/create_reply/{{ post_id }}"
+    hx-target="#reply_area_{{ post_id }}"
+  >
+    Generate reply
+  </button>
+</div>

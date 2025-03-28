@@ -70,6 +70,23 @@ WHERE posts.id = ?",
         .map(|r| r.content.ok_or(DBError::MissingGeneration))?
     }
 
+    pub async fn get_content_by_generation_id(
+        &self,
+        generation_id: i64,
+    ) -> Result<String, DBError> {
+        sqlx::query!(
+            "
+SELECT content
+FROM generations
+WHERE id = ?",
+            generation_id
+        )
+        .fetch_one(&self.pool)
+        .await
+        .map(|r| r.content)
+        .map_err(DBError::Inner)
+    }
+
     // TODO this should return Result<Vec<Result<String, DBError>, DBError>
     pub async fn get_replies_by_post_id(&self, id: i64) -> Result<Vec<String>, DBError> {
         sqlx::query!(

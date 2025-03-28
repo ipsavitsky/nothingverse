@@ -12,6 +12,7 @@ use super::error::WebError;
 pub struct OldPostsTemplate {
     before_id: i64,
     old_posts: Vec<Post>,
+    generated_reply: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -28,5 +29,6 @@ pub async fn handle(
     Ok(OldPostsTemplate {
         before_id: posts.last().map(|x| x.id).unwrap_or(form.before),
         old_posts: posts,
+        generated_reply: None,
     })
 }

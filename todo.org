@@ -1,7 +1,6 @@
-* TODO Make replies to posts
-** TODO Make them update correctly
+* DONE Make replies to posts
+** DONE Make them update correctly
 So I doubt that I'll need to do the complicated polling mechanism I have for posts - too many connections to uphold. I would rather have reply be inserted by htmx upon generating and then pull *ALL* replies when reloading the page.
-** KILL Bundling (Do I even need it? How do I pair it with nix?)
 * TODO Nix
 ** TODO Nix service definition
 * TODO Write a readme

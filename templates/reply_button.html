@@ -3,6 +3,7 @@
   class="btn"
   hx-post="/submit_reply/{{ post_id }}"
   hx-target="#reply_area_{{ post_id }}"
+  hx-swap="outerHTML"
   hx-disinherit="hx-target"
   hx-vals="js:{generation_id: {{ generation_id }}}"
 >
