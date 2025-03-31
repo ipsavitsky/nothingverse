@@ -1,4 +1,4 @@
-<div class="w-1/2 m-1 p-1 border-2 rounded-md">
+<div class="bg-[#ffffe6] w-1/2 m-1 p-1 border-2 rounded-md">
   {{ post.content }} {% for reply in post.replies %} {% include "reply.html" %}
   {% endfor %} {% let post_id = post.id %}
   <div id="reply_area_{{ post.id }}">
