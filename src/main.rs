@@ -50,7 +50,7 @@ async fn main() {
         .init();
 
     if !Sqlite::database_exists(&conf.db_url).await.unwrap() {
-	tracing::warn!("database file {} not found, creating...", &conf.db_url);
+        tracing::warn!("database file {} not found, creating...", &conf.db_url);
         Sqlite::create_database(&conf.db_url).await.unwrap();
     }
 
