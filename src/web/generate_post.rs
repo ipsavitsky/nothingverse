@@ -1,12 +1,11 @@
 use askama::Template;
 use askama_web::WebTemplate;
 use axum::{
-    extract::State,
+    extract::{Path, State},
     response::{
         sse::{Event, KeepAlive},
         Sse,
     },
-    Form,
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{generation::completion::request::GenerationRequest, Ollama};
@@ -26,13 +25,13 @@ struct PostButton {
 }
 
 #[derive(Deserialize)]
-pub struct FormData {
+pub struct PathData {
     generation_group: i64,
 }
 
 pub async fn handle(
     State(s): State<AppState>,
-    Form(f): Form<FormData>,
+    Path(p): Path<PathData>,
 ) -> Result<Sse<impl Stream<Item = Result<Event, GenerationError>>>, WebError> {
     let ollama = Ollama::from_url(s.conf.ollama_url);
     let mut res = String::new();
@@ -45,7 +44,7 @@ pub async fn handle(
                 if resp.done {
                     let generation_id = futures::executor::block_on(
                         s.db.clone()
-                            .write_generation(f.generation_group, res.clone()),
+                            .write_generation(p.generation_group, res.clone()),
                     )?;
 
                     res = PostButton {

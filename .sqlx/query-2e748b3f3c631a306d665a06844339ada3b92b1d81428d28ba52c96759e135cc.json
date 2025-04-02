@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "INSERT INTO generations (content) VALUES (?) RETURNING id",
+  "query": "INSERT INTO generations (generation_group_id, content) VALUES (?, ?) RETURNING id",
   "describe": {
     "columns": [
       {
@@ -10,11 +10,11 @@
       }
     ],
     "parameters": {
-      "Right": 1
+      "Right": 2
     },
     "nullable": [
-      false
+      true
     ]
   },
-  "hash": "423ecedc4d20bde5c5d2c6caa215999cd18ae2b888da520e080d9b52d5c51e03"
+  "hash": "2e748b3f3c631a306d665a06844339ada3b92b1d81428d28ba52c96759e135cc"
 }
