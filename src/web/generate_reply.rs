@@ -6,6 +6,7 @@ use axum::{
         sse::{Event, KeepAlive},
         Sse,
     },
+    Form,
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{generation::completion::request::GenerationRequest, Ollama};
@@ -30,9 +31,15 @@ pub struct PathData {
     post_id: i64,
 }
 
+#[derive(Deserialize)]
+pub struct FormData {
+    generation_group: i64,
+}
+
 pub async fn handle(
     Path(p): Path<PathData>,
     State(s): State<AppState>,
+    Form(f): Form<FormData>,
 ) -> Result<Sse<impl Stream<Item = Result<Event, GenerationError>>>, WebError> {
     let post_content = s.db.get_content_by_post_id(p.post_id).await?;
 
@@ -48,8 +55,10 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
-                    let generation_id =
-                        futures::executor::block_on(s.db.clone().write_generation(res.clone()))?;
+                    let generation_id = futures::executor::block_on(
+                        s.db.clone()
+                            .write_generation(f.generation_group, res.clone()),
+                    )?;
 
                     res = ReplyButton {
                         generation_id,

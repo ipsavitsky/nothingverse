@@ -1,10 +1,9 @@
 {{ post_data }}
 <button
   class="btn"
-  hx-post="/submit_post"
+  hx-post="/submit_post/{{ generation_id }}"
   hx-target="#post_area"
   hx-disinherit="hx-target"
-  hx-vals="js:{generation_id: {{ generation_id }}}"
 >
   Post
 </button>

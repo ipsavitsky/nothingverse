@@ -1,6 +1,6 @@
 use askama::Template;
 use askama_web::WebTemplate;
-use axum::{extract::State, Form};
+use axum::extract::{Path, State};
 use serde::Deserialize;
 
 use crate::AppState;
@@ -12,15 +12,15 @@ use super::error::WebError;
 pub struct CreatePostButtonTemplate {}
 
 #[derive(Deserialize)]
-pub struct PostData {
+pub struct PathData {
     generation_id: i64,
 }
 
 pub async fn handle(
     State(s): State<AppState>,
-    Form(f): Form<PostData>,
+    Path(p): Path<PathData>,
 ) -> Result<CreatePostButtonTemplate, WebError> {
-    tracing::info!("Creating new post: {}", f.generation_id);
-    s.db.write_post(f.generation_id).await?;
+    tracing::info!("Creating new post: {}", p.generation_id);
+    s.db.write_post(p.generation_id).await?;
     Ok(CreatePostButtonTemplate {})
 }

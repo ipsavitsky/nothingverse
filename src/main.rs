@@ -73,8 +73,14 @@ async fn main() {
             "/generate_reply/{post_id}",
             get(web::generate_reply::handle),
         )
-        .route("/submit_post", post(web::submit_post::handle))
-        .route("/submit_reply/{post_id}", post(web::submit_reply::handle))
+        .route(
+            "/submit_post/{generation_id}",
+            post(web::submit_post::handle),
+        )
+        .route(
+            "/submit_reply/{post_id}/{generation_id}",
+            post(web::submit_reply::handle),
+        )
         .route("/new_posts", get(web::new_posts::handle))
         .route("/old_posts", get(web::old_posts::handle))
         .route_service(

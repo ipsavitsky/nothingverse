@@ -6,9 +6,11 @@ use axum::{
         sse::{Event, KeepAlive},
         Sse,
     },
+    Form,
 };
 use futures::stream::{self, Stream};
 use ollama_rs::{generation::completion::request::GenerationRequest, Ollama};
+use serde::Deserialize;
 use std::time::Duration;
 use tokio_stream::StreamExt;
 
@@ -23,8 +25,14 @@ struct PostButton {
     post_data: String,
 }
 
+#[derive(Deserialize)]
+pub struct FormData {
+    generation_group: i64,
+}
+
 pub async fn handle(
     State(s): State<AppState>,
+    Form(f): Form<FormData>,
 ) -> Result<Sse<impl Stream<Item = Result<Event, GenerationError>>>, WebError> {
     let ollama = Ollama::from_url(s.conf.ollama_url);
     let mut res = String::new();
@@ -35,8 +43,10 @@ pub async fn handle(
             for resp in x? {
                 res += resp.response.as_str();
                 if resp.done {
-                    let generation_id =
-                        futures::executor::block_on(s.db.clone().write_generation(res.clone()))?;
+                    let generation_id = futures::executor::block_on(
+                        s.db.clone()
+                            .write_generation(f.generation_group, res.clone()),
+                    )?;
 
                     res = PostButton {
                         generation_id,

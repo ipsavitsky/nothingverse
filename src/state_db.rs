@@ -22,15 +22,23 @@ pub enum DBError {
 }
 
 impl StateDB {
-    pub async fn write_generation(&self, content: String) -> Result<i64, DBError> {
+    pub async fn write_generation(&self, gen_group: i64, content: String) -> Result<i64, DBError> {
         sqlx::query!(
-            "INSERT INTO generations (content) VALUES (?) RETURNING id",
+            "INSERT INTO generations (generation_group_id, content) VALUES (?, ?) RETURNING id",
+            gen_group,
             content
         )
         .fetch_one(&self.pool)
         .await
-        .map(|r| r.id)
-        .map_err(DBError::Inner)
+        .map(|r| r.id.ok_or(DBError::MissingGeneration))?
+    }
+
+    pub async fn get_new_generation_group(&self) -> Result<i64, DBError> {
+        sqlx::query!("INSERT INTO generation_groups DEFAULT VALUES RETURNING id",)
+            .fetch_one(&self.pool)
+            .await
+            .map(|r| r.id)
+            .map_err(DBError::Inner)
     }
 
     pub async fn write_post(&self, generation_id: i64) -> Result<(), DBError> {
