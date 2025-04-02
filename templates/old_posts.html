@@ -1,5 +1,5 @@
 {% for post in old_posts %} {% include "post.html" %} {% endfor %} {% if
-before_id != 1 %}
+before_id > 1 %}
 <div
   hx-get="/old_posts"
   hx-vals="js:{before:{{ before_id }}}"
