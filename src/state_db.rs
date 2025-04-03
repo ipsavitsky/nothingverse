@@ -43,7 +43,18 @@ impl StateDB {
 
     pub async fn write_post(&self, generation_id: i64) -> Result<(), DBError> {
         sqlx::query!(
-            "INSERT INTO posts (generation_id) VALUES (?)",
+            "
+BEGIN TRANSACTION;
+
+UPDATE generation_groups
+SET used = 1
+WHERE id = (SELECT generation_group_id FROM generations WHERE id = ?);
+
+INSERT INTO posts (generation_id) VALUES (?);
+
+COMMIT TRANSACTION;
+",
+            generation_id,
             generation_id,
         )
         .execute(&self.pool)
@@ -54,7 +65,18 @@ impl StateDB {
 
     pub async fn write_reply(&self, generation_id: i64, post_id: i64) -> Result<(), DBError> {
         sqlx::query!(
-            "INSERT INTO replies (generation_id, post_id) VALUES (?, ?)",
+            "
+BEGIN TRANSACTION;
+
+UPDATE generation_groups
+SET used = 1
+WHERE id = (SELECT generation_group_id FROM generations WHERE id = ?);
+
+INSERT INTO replies (generation_id, post_id) VALUES (?, ?);
+
+COMMIT TRANSACTION;
+",
+            generation_id,
             generation_id,
             post_id
         )

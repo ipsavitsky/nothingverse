@@ -68,7 +68,10 @@ async fn main() {
         .route("/", get(web::index::handle))
         .route("/create_post", post(web::create_post::handle))
         .route("/create_reply/{post_id}", post(web::create_reply::handle))
-        .route("/generate_post/{generation_group}", get(web::generate_post::handle))
+        .route(
+            "/generate_post/{generation_group}",
+            get(web::generate_post::handle),
+        )
         .route(
             "/generate_reply/{post_id}/{generation_group}",
             get(web::generate_reply::handle),

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\nBEGIN TRANSACTION;\n\nUPDATE generation_groups\nSET used = 1\nWHERE id = (SELECT generation_group_id FROM generations WHERE id = ?);\n\nINSERT INTO replies (generation_id, post_id) VALUES (?, ?);\n\nCOMMIT TRANSACTION;\n",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "5b018c8692e28b4fc3158159a5d4f79a452b7199566ae63b54b49100a02fe7fa"
+}
