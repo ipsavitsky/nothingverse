@@ -41,6 +41,21 @@ impl StateDB {
             .map_err(DBError::Inner)
     }
 
+    pub async fn group_is_used(&self, generation_id: i64) -> Result<bool, DBError> {
+        sqlx::query!(
+            "
+SELECT used FROM generation_groups
+LEFT JOIN generations on generation_groups.id = generations.generation_group_id
+WHERE generations.id = ?
+",
+            generation_id
+        )
+        .fetch_one(&self.pool)
+        .await
+        .map(|r| r.used)
+        .map_err(DBError::Inner)
+    }
+
     pub async fn write_post(&self, generation_id: i64) -> Result<(), DBError> {
         sqlx::query!(
             "

@@ -21,6 +21,12 @@ pub async fn handle(
     Path(p): Path<PathData>,
 ) -> Result<CreatePostButtonTemplate, WebError> {
     tracing::info!("Creating new post: {}", p.generation_id);
-    s.db.write_post(p.generation_id).await?;
-    Ok(CreatePostButtonTemplate {})
+    let gen_group_used = s.db.group_is_used(p.generation_id).await?;
+    tracing::debug!("Generation is used: {}", gen_group_used);
+    if !gen_group_used {
+        s.db.write_post(p.generation_id).await?;
+        Ok(CreatePostButtonTemplate {})
+    } else {
+        Err(WebError::GenerationAlreadyUsed)
+    }
 }

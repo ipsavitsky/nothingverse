@@ -10,6 +10,8 @@ pub enum WebError {
     Generation(#[from] OllamaError),
     #[error("Error querying database: {0}")]
     DB(#[from] DBError),
+    #[error("This generation is already marked used")]
+    GenerationAlreadyUsed,
 }
 
 impl IntoResponse for WebError {
