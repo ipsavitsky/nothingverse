@@ -1,4 +1,4 @@
-<div class="post w-1/2 md:w-full">
+<div class="post w-1/2 sm:w-auto">
   {{ post.content }} {% for reply in post.replies %} {% include "reply.html" %}
   {% endfor %} {% let post_id = post.id %}
   <div id="reply_area_{{ post.id }}">
