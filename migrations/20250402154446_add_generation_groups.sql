@@ -7,6 +7,6 @@ CREATE TABLE generation_groups (
 -- create a default group that all generations get assigned to
 INSERT INTO generation_groups (used) VALUES (1);
 
-ALTER TABLE generations ADD COLUMN generation_group_id INTEGER NOT NULL REFERENCES generation_groups (
-    id
-) DEFAULT 1;
+ALTER TABLE generations ADD COLUMN generation_group_id INTEGER REFERENCES generation_groups (id);
+
+UPDATE generations SET generation_group_id = 1;
