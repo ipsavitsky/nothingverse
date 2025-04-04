@@ -6,10 +6,12 @@
   <title>nothingverse</title>
 </head>
 
-<body class="centered text-lg">
+<body class="centered text-lg md:text-3xl">
   <div class="centered">
-    <p class="mt-3 text-3xl font-medium">Welcome to</p>
-    {% include "logo.html" %}
+    <p class="mt-3 text-3xl md:text-4xl">Welcome to</p>
+    <div class="md:text-base">
+      {% include "logo.html" %}
+    </div>
   </div>
   <div class="centered m-2" id="post_area">
     {% include "create_post_button.html" %}
