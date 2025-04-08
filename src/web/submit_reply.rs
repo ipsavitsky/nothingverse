@@ -28,7 +28,7 @@ pub async fn handle(
     let gen_group_used = s.db.group_is_used(p.generation_id).await?;
     tracing::debug!("Generation is used: {}", gen_group_used);
     if !gen_group_used {
-	s.db.write_reply(p.generation_id, p.post_id).await?;
+        s.db.write_reply(p.generation_id, p.post_id).await?;
         let generated_reply = s.db.get_content_by_generation_id(p.generation_id).await?;
         Ok(CreateReplyButtonTemplate {
             post_id: p.post_id,

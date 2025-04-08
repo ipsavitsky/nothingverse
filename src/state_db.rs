@@ -30,7 +30,8 @@ impl StateDB {
         )
         .fetch_one(&self.pool)
         .await
-        .map(|r| r.id.ok_or(DBError::MissingGeneration))?
+        .map(|r| r.id)
+        .map_err(DBError::Inner)
     }
 
     pub async fn get_new_generation_group(&self) -> Result<i64, DBError> {
