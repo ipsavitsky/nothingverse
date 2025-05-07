@@ -8,4 +8,5 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yaml
   build:
+    needs: [lint]
     uses: ./.github/workflows/build.yaml

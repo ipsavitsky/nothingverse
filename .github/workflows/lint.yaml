@@ -3,7 +3,7 @@ name: lint
 on: [workflow_call]
 
 jobs:
-  lint:
+  nix:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
