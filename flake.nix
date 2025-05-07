@@ -96,6 +96,7 @@
               sqlite
               tailwindcss_4
               htmlq
+              zizmor
               rust-bin.stable.latest.default
             ];
           };

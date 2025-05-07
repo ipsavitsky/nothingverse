@@ -1,9 +1,9 @@
 use askama::Template;
 use askama_web::WebTemplate;
-use axum::{extract::State, Form};
+use axum::{Form, extract::State};
 use serde::Deserialize;
 
-use crate::{state_db::models::Post, AppState};
+use crate::{AppState, state_db::models::Post};
 
 use super::error::WebError;
 

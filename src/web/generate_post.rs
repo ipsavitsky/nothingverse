@@ -3,12 +3,12 @@ use askama_web::WebTemplate;
 use axum::{
     extract::{Path, State},
     response::{
-        sse::{Event, KeepAlive},
         Sse,
+        sse::{Event, KeepAlive},
     },
 };
 use futures::stream::{self, Stream};
-use ollama_rs::{generation::completion::request::GenerationRequest, Ollama};
+use ollama_rs::{Ollama, generation::completion::request::GenerationRequest};
 use serde::Deserialize;
 use std::time::Duration;
 use tokio_stream::StreamExt;
