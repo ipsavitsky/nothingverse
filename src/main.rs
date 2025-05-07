@@ -1,10 +1,10 @@
 use axum::{
+    Router,
     http::header,
     routing::{get, post},
-    Router,
 };
 use clap::Parser;
-use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Sqlite};
+use sqlx::{Sqlite, migrate::MigrateDatabase, sqlite::SqlitePoolOptions};
 use url::Url;
 mod state_db;
 mod web;
