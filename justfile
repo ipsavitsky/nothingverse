@@ -14,7 +14,7 @@ make_model:
     ollama create nothing -f ./ollama/nothing.modelfile
 
 make_styles:
-    tailwindcss -i ./templates/styles-in.css -o ./templates/styles.css
+    tailwindcss -i ./templates/styles-in.css -o ./templates/styles.css --config nothingverse/tailwind.config.js --postcss nothingverse/postcss.config.js --minify
 
 pull_htmx:
      mkdir -p templates/assets

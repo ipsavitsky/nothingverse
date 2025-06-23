@@ -2,7 +2,8 @@
 %}
 <div id="reply_area_{{ post_id }}">
   <button
-    class="btn"
+    type="button"
+    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-3"
     hx-post="/create_reply/{{ post_id }}"
     hx-target="#reply_area_{{ post_id }}"
   >
