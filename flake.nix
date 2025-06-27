@@ -62,6 +62,7 @@
               toilet
               htmlq
               tailwindcss_4
+              bun
             ];
             overrideMain = _: {
               preBuild = ''
@@ -98,6 +99,7 @@
               htmlq
               zizmor
               rust-bin.stable.latest.default
+              bun
             ];
           };
         };

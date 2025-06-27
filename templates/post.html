@@ -1,8 +1,22 @@
-<div class="post w-auto md:w-1/2">
-  {{ post.content }} {% for reply in post.replies %} {% include "reply.html" %}
-  {% endfor %} {% let post_id = post.id %}
-  <div id="reply_area_{{ post.id }}">
-    {% include "create_reply_button.html" %}
+<div class="w-auto md:w-1/2">
+  <div
+    class="rounded-xl border bg-card text-card-foreground shadow-sm w-full p-6"
+  >
+    <!-- Post Content -->
+    <div>{{ post.content | safe }}</div>
+
+    <!-- Replies Section (if any) -->
+    <div class="mt-4 space-y-4">
+      {# Add some spacing between replies #} {% for reply in post.replies %} {%
+      include "reply.html" %} {% endfor %}
+    </div>
+
+    <!-- Reply Button Area (Card Footer equivalent) -->
+    <div class="flex items-center pt-4 mt-2">
+      <div id="reply_area_{{ post.id }}" class="w-full">
+        {% let post_id = post.id %} {% include "create_reply_button.html" %}
+      </div>
+    </div>
   </div>
 </div>
 <br />
