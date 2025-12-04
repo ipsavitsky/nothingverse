@@ -57,7 +57,7 @@ pub async fn handle(
             Ok(Event::default().data(&res).event("generation_chunk"))
         });
 
-    let ending_event = stream::once(async { Ok(Event::default().data("").event("close")) });
+    let ending_event = stream::once(async { Ok(Event::default().data("close").event("close")) });
 
     Ok(Sse::new(stream.chain(ending_event)).keep_alive(
         KeepAlive::new()
