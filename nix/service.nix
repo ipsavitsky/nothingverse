@@ -14,7 +14,7 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      inherit (nothingverse.${config.nixpkgs.system}) default;
+      inherit (nothingverse.${pkgs.stdenv.hostPlatform.system}) default;
     };
 
     url = lib.mkOption {
@@ -91,7 +91,9 @@ in
       };
 
       preStart = lib.mkIf cfg.installOllamaModel ''
-        ${pkgs.ollama}/bin/ollama create nothing -f ${nothingverse.${config.nixpkgs.system}.modelfile}
+        ${pkgs.ollama}/bin/ollama create nothing -f ${
+          nothingverse.${pkgs.stdenv.hostPlatform.system}.modelfile
+        }
       '';
 
       wantedBy = [ "multi-user.target" ];
