@@ -6,7 +6,13 @@
       {
         "name": "used",
         "ordinal": 0,
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "generation_groups",
+            "name": "used"
+          }
+        }
       }
     ],
     "parameters": {
