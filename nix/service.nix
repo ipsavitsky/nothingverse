@@ -96,6 +96,8 @@ in
         }
       '';
 
+      after = [ "ollama.service" ];
+      wants = [ "ollama.service" ];
       wantedBy = [ "multi-user.target" ];
     };
   };
