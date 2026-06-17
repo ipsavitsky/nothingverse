@@ -2,9 +2,9 @@
 .direnv
 result
 resources/
+node_modules/
 
 # generates
 templates/logo.html
 templates/styles.css
-templates/assets
 db/

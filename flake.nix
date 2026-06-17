@@ -37,14 +37,7 @@
           url = "http://www.figlet.org/fonts/chunky.flf";
           hash = "sha256-A0BwES9Pz9YT8GDxrg5ECHDe/fNjrrMKtG9mnzPXsXM=";
         };
-        htmx_org = pkgs.fetchurl {
-          url = "https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js";
-          hash = "sha256-4gndpcgjVHnzFm3vx3UOHbzVpcGAi3eS/C5nM3aPtEc=";
-        };
-        htmx_ext_sse = pkgs.fetchurl {
-          url = "https://unpkg.com/htmx-ext-sse@2.2.3/dist/sse.min.js";
-          hash = "sha256-IEoX7Cv0kLffWS9V6+VH5EsJn7U8iLRC0LztDhAyfhI=";
-        };
+        npmHash = import ./nix/npmHash.nix;
         treefmtModule = treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix;
       in
       {
@@ -63,14 +56,19 @@
               htmlq
               tailwindcss_4
             ];
-            overrideMain = _: {
+            overrideMain = old: {
+              nativeBuildInputs = old.nativeBuildInputs ++ [
+                pkgs.nodejs
+                pkgs.npmHooks.npmConfigHook
+              ];
+              npmDeps = pkgs.fetchNpmDeps {
+                src = ./.;
+                hash = npmHash;
+              };
               preBuild = ''
                 # for some reason I have to symlink or toilet can't open the font
                 tailwindcss -i ./templates/styles-in.css -o ./templates/styles.css
                 ln -s ${chunkyFont} chunky.flf
-                mkdir -p templates/assets/
-                ln -s ${htmx_org} templates/assets/htmx.min.js
-                ln -s ${htmx_ext_sse} templates/assets/sse.min.js
                 toilet -f ./chunky.flf nothingverse --html | htmlq 'body' > templates/logo.html
               '';
               SQLX_OFFLINE = true;
@@ -98,6 +96,8 @@
               htmlq
               zizmor
               rust-bin.stable.latest.default
+              nodejs
+              nil
             ];
           };
         };

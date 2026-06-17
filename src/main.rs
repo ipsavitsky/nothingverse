@@ -100,7 +100,7 @@ async fn main() {
             get(|| async {
                 (
                     [(header::CONTENT_TYPE, "text/javascript")],
-                    include_str!("../templates/assets/htmx.min.js"),
+                    include_str!("../node_modules/htmx.org/dist/htmx.min.js"),
                 )
             }),
         )
@@ -109,7 +109,7 @@ async fn main() {
             get(|| async {
                 (
                     [(header::CONTENT_TYPE, "text/javascript")],
-                    include_str!("../templates/assets/sse.min.js"),
+                    include_str!("../node_modules/htmx-ext-sse/dist/sse.min.js"),
                 )
             }),
         )
