@@ -39,12 +39,13 @@
         };
         npmHash = import ./nix/npmHash.nix;
         treefmtModule = treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix;
-      in
+      in rec
       {
         formatter = treefmtModule.config.build.wrapper;
 
         checks = {
           formatting = treefmtModule.config.build.check self;
+          x86_64-linux = packages.nothingverse;
         };
 
         packages = rec {
